@@ -22,10 +22,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.projeto_jeitinho_brasileiro.R
+import com.example.projeto_jeitinho_brasileiro.repositorio.user.Cadastro
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TelaPrincipal(modifier: Modifier = Modifier, onLogoffClick: () -> Unit){
+fun TelaPrincipal(modifier: Modifier = Modifier, onLogoffClick: () -> Unit, cadastro: Cadastro){
     Scaffold(
         topBar = {
             TopAppBar(
@@ -34,7 +35,7 @@ fun TelaPrincipal(modifier: Modifier = Modifier, onLogoffClick: () -> Unit){
                     titleContentColor = MaterialTheme.colorScheme.primary,
                 ),
                 title = {
-                    Text("Jeitinho Brasileiro")
+                    Text("Jeitinho Brasileiro - ")
                 },
                 navigationIcon = {
                     IconButton(onClick = { onLogoffClick() }) {

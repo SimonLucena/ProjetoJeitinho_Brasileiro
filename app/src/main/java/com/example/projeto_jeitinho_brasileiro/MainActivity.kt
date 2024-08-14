@@ -34,6 +34,7 @@ class MainActivity : ComponentActivity() {
                 ) { innerPadding ->
                     val cadastro = Cadastro()
                     cadastro.addPerfil(Usuario("Simon Lucena de Castro", "lucena.simon@academico.ifpb.edu.br", "1234"))
+                    cadastro.addPerfil(Usuario("Simon Teste", "", ""))
 
                     val navController = rememberNavController()
                     NavHost(navController = navController, startDestination = "login") {
@@ -63,7 +64,8 @@ class MainActivity : ComponentActivity() {
                                     .background( Color.White ),
                                 onLogoffClick = {
                                     navController.navigate("login")
-                                }
+                                },
+                                cadastro
                             )
                         }
                     }

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "822991732532",
+    "project_id": "jeitinho-brasileiro",
+    "storage_bucket": "jeitinho-brasileiro.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:822991732532:android:440a97c1edf09ba70fef61",
+        "android_client_info": {
+          "package_name": "com.example.projeto_jeitinho_brasileiro"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBT5J9McTwXggNWK12GvnXwBdC-cvXrK1g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -49,9 +50,9 @@ fun TelaSignup(innerPadding: PaddingValues, onSigninClick: () -> Unit, cadastro:
                 fontSize = 36.sp,
                 fontWeight = FontWeight.Bold
             ),
-            text = "Login"
+            text = "Cadastro"
         )
-        TextField(value = user.toString(), onValueChange = {user = it.ifEmpty { null }}, placeholder = {
+        OutlinedTextField(value = user.toString(), onValueChange = {user = it.ifEmpty { null }}, placeholder = {
             Text(text = "Usuário")
         })
         Spacer(modifier = Modifier.height(10.dp))

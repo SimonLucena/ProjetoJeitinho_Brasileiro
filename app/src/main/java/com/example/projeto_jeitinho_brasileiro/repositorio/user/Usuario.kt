@@ -1,9 +1,6 @@
 package com.example.projeto_jeitinho_brasileiro.repositorio.user
 
-import com.example.projeto_jeitinho_brasileiro.repositorio.conteudo.Repositorio
-
-
-class Usuario(val nome:String, val email:String, val senha:String) {
+data class Usuario(val nome:String = "", val email:String = "", val senha:String = "") {
 }
 
 class Cadastro {

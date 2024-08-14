@@ -1,5 +1,6 @@
 package com.example.projeto_jeitinho_brasileiro.ui.telas
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -19,9 +20,11 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -29,10 +32,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.projeto_jeitinho_brasileiro.repositorio.user.Cadastro
 import com.example.projeto_jeitinho_brasileiro.repositorio.user.Usuario
+import com.example.projeto_jeitinho_brasileiro.repositorio.user.UsuarioDAO
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
+val usuarioDAO: UsuarioDAO = UsuarioDAO()
 @Composable
 fun TelaLogin(innerPadding: PaddingValues, onSigninClick: () -> Unit, onSignupClick: () -> Unit, cadastro: Cadastro) {
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+
     var login by  remember{mutableStateOf("")}
     var senha by  remember{mutableStateOf("")}
     var mensagemErro by remember { mutableStateOf<String?>("") }
@@ -64,10 +74,14 @@ fun TelaLogin(innerPadding: PaddingValues, onSigninClick: () -> Unit, onSignupCl
         Row {
             Column {
                 Button(onClick = {
-                    if (cadastro.getSenha(login) == senha) {
-                        onSigninClick()
-                    }else{
-                        mensagemErro = "Login ou senha inválidos"
+                    scope.launch(Dispatchers.IO) {
+                        usuarioDAO.buscarPorLogin(login, callBack = { usuario ->
+                            if(usuario != null && usuario.senha == senha){
+                                onSigninClick()
+                            }else{
+                                mensagemErro = "Login ou senha inválidos"
+                            }
+                        })
                     }
                 }) {
                     Text(text = "Entrar")
@@ -83,12 +97,13 @@ fun TelaLogin(innerPadding: PaddingValues, onSigninClick: () -> Unit, onSignupCl
             }
         }
         mensagemErro?.let {
-            Text(
-                text = it,
-                color = MaterialTheme.colorScheme.error
-            )
-            LaunchedEffect(Unit) {
-                delay(5000)
+//            Text(
+//                text = it,
+//                color = MaterialTheme.colorScheme.error
+//            )
+            LaunchedEffect(it) {
+                Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+//                delay(5000)
                 mensagemErro = null
             }
         }

@@ -1,6 +1,6 @@
 package com.example.projeto_jeitinho_brasileiro.repositorio.user
 
-data class Usuario(val nome:String = "", val email:String = "", val senha:String = "") {
+data class Usuario(val indice:Int = 0, val nome:String = "", val email:String = "", val senha:String = "") {
 }
 
 class Cadastro {
@@ -19,16 +19,16 @@ class Cadastro {
         return (cadastro.size-1)
     }
 
-    fun getEmail(email: String): String?{
-        val usuario = cadastro.find { it.email == email }
+    fun getEmail(indice: Int): String?{
+        val usuario = cadastro.find { it.indice == indice }
         return usuario?.email
     }
-    fun getNome(email: String): String?{
-        val usuario = cadastro.find { it.email == email }
+    fun getNome(indice: Int): String?{
+        val usuario = cadastro.find { it.indice == indice }
         return usuario?.nome
     }
-    fun getSenha(email: String): String?{
-        val usuario = cadastro.find { it.email == email }
+    fun getSenha(indice: Int): String?{
+        val usuario = cadastro.find { it.indice == indice }
         return usuario?.senha
     }
 }

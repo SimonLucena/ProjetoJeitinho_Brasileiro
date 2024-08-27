@@ -32,4 +32,14 @@ class UsuarioDAO {
                 callBack(null)
             }
     }
+
+    fun cadastrarUsuarioDAO(nome: String, email: String, senha: String){
+        db.collection("usuario").add(
+            hashMapOf(
+                "login" to email,
+                "nome" to nome,
+                "senha" to senha
+            )
+        )
+    }
 }

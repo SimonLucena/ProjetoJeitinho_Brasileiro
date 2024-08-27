@@ -38,8 +38,9 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 val usuarioDAO: UsuarioDAO = UsuarioDAO()
+val cadastro = Cadastro()
 @Composable
-fun TelaLogin(innerPadding: PaddingValues, onSigninClick: () -> Unit, onSignupClick: () -> Unit, cadastro: Cadastro) {
+fun TelaLogin(innerPadding: PaddingValues, onSigninClick: () -> Unit, onSignupClick: () -> Unit) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
 
@@ -77,6 +78,7 @@ fun TelaLogin(innerPadding: PaddingValues, onSigninClick: () -> Unit, onSignupCl
                     scope.launch(Dispatchers.IO) {
                         usuarioDAO.buscarPorLogin(login, callBack = { usuario ->
                             if(usuario != null && usuario.senha == senha){
+                                cadastro.addPerfil(Usuario(0, usuario.nome, usuario.email, usuario.senha))
                                 onSigninClick()
                             }else{
                                 mensagemErro = "Login ou senha inválidos"

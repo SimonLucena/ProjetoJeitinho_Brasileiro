@@ -32,10 +32,6 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier
                         .fillMaxSize()
                 ) { innerPadding ->
-                    val cadastro = Cadastro()
-                    cadastro.addPerfil(Usuario("Simon Lucena de Castro", "lucena.simon@academico.ifpb.edu.br", "1234"))
-                    cadastro.addPerfil(Usuario("Simon Teste", "", ""))
-
                     val navController = rememberNavController()
                     NavHost(navController = navController, startDestination = "login") {
                         composable("login") {
@@ -45,16 +41,14 @@ class MainActivity : ComponentActivity() {
                                 },
                                 onSignupClick = {
                                     navController.navigate("signup")
-                                },
-                                cadastro
+                                }
                             )
                         }
                         composable("signup") {
                             TelaSignup(innerPadding,
                                 onSigninClick = {
                                     navController.navigate("login")
-                                },
-                                cadastro
+                                }
                             )
                         }
                         composable("principal") {
@@ -64,8 +58,7 @@ class MainActivity : ComponentActivity() {
                                     .background( Color.White ),
                                 onLogoffClick = {
                                     navController.navigate("login")
-                                },
-                                cadastro
+                                }
                             )
                         }
                     }

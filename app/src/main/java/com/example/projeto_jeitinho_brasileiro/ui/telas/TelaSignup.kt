@@ -27,10 +27,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.projeto_jeitinho_brasileiro.repositorio.user.Cadastro
 import com.example.projeto_jeitinho_brasileiro.repositorio.user.Usuario
+import com.example.projeto_jeitinho_brasileiro.repositorio.user.UsuarioDAO
 import kotlinx.coroutines.delay
 
 @Composable
-fun TelaSignup(innerPadding: PaddingValues, onSigninClick: () -> Unit, cadastro: Cadastro) {
+fun TelaSignup(innerPadding: PaddingValues, onSigninClick: () -> Unit) {
     var user by  remember{ mutableStateOf<String?>("")}
     var login by  remember{mutableStateOf<String?>("")}
     var senha by  remember{mutableStateOf<String?>("")}
@@ -69,12 +70,16 @@ fun TelaSignup(innerPadding: PaddingValues, onSigninClick: () -> Unit, cadastro:
                 user.isNullOrEmpty() || login.isNullOrEmpty() || senha.isNullOrEmpty() -> {
                     mensagemErro = "Preencha todos os campos"
                 }
-                cadastro.getEmail(login!!) != null -> {
-                    mensagemErro = "Login já existe"
-                }
-                else -> {
-                    cadastro.addPerfil(Usuario(user!!, login!!, senha!!))
-                    onSigninClick()
+                else ->{
+                    usuarioDAO.buscarPorLogin(login!!, callBack = { usuario ->
+                        if(usuario != null && usuario.email == login){
+                            mensagemErro = "Login já existe"
+                        }
+                        else{
+                            usuarioDAO.cadastrarUsuarioDAO(user!!, login!!, senha!!)
+                            onSigninClick()
+                        }
+                    })
                 }
             }
         }) {

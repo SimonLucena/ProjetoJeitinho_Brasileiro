@@ -26,7 +26,8 @@ import com.example.projeto_jeitinho_brasileiro.repositorio.user.Cadastro
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TelaPrincipal(modifier: Modifier = Modifier, onLogoffClick: () -> Unit, cadastro: Cadastro){
+fun TelaPrincipal(modifier: Modifier = Modifier, onLogoffClick: () -> Unit){
+//    val usuario =
     Scaffold(
         topBar = {
             TopAppBar(

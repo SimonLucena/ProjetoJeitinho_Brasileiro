@@ -17,11 +17,14 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.projeto_jeitinho_brasileiro.repositorio.user.Cadastro
 import com.example.projeto_jeitinho_brasileiro.repositorio.user.Usuario
+import com.example.projeto_jeitinho_brasileiro.repositorio.user.UsuarioDAO
 import com.example.projeto_jeitinho_brasileiro.ui.telas.TelaLogin
 import com.example.projeto_jeitinho_brasileiro.ui.telas.TelaPrincipal
 import com.example.projeto_jeitinho_brasileiro.ui.telas.TelaSignup
 import com.example.projeto_jeitinho_brasileiro.ui.theme.ProjetoJeitinho_BrasileiroTheme
 
+val usuarioDAO: UsuarioDAO = UsuarioDAO()
+val cadastro = Cadastro()
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,6 +60,7 @@ class MainActivity : ComponentActivity() {
                                     .padding(innerPadding)
                                     .background( Color.White ),
                                 onLogoffClick = {
+                                    cadastro.removePerfil()
                                     navController.navigate("login")
                                 }
                             )

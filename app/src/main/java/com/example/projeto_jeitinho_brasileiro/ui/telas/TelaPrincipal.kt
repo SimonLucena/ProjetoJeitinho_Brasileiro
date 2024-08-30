@@ -14,6 +14,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ExitToApp
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.DropdownMenu
@@ -112,6 +113,7 @@ fun TelaPrincipal(modifier: Modifier = Modifier, onLogoffClick: () -> Unit){
                     text = "Por: Simon Lucena de Castro",
                 )
             }
+<<<<<<< Updated upstream
         }
     ) { innerPadding ->
         Column(
@@ -121,6 +123,66 @@ fun TelaPrincipal(modifier: Modifier = Modifier, onLogoffClick: () -> Unit){
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             TelaConteudo()
+=======
+        },
+        gesturesEnabled = false
+    ){
+        Scaffold(
+
+            topBar = {
+                CenterAlignedTopAppBar(
+                    colors = topAppBarColors(
+                        containerColor = MaterialTheme.colorScheme.primaryContainer,
+                        titleContentColor = MaterialTheme.colorScheme.primary,
+                    ),
+                    title = {
+                        Text("Jeitinho Brasileiro")
+                    },
+                    navigationIcon = {
+                        IconButton(onClick = {
+                            scope.launch {
+                                drawerState.apply {
+                                    if (isClosed) open() else close()
+                                }
+                            }
+                        }) {
+                            Icon(imageVector = Icons.Filled.Menu, contentDescription = "Menu" )
+                        }
+                    },
+                    actions = {
+                        IconButton(onClick = { /* do something */ }) {
+                            Icon(
+                                imageVector = Icons.Filled.ShoppingCart,
+                                contentDescription = "Localized description"
+                            )
+                        }
+                    }
+                )
+            }//,
+    //        bottomBar = {
+    //            BottomAppBar(
+    //                containerColor = MaterialTheme.colorScheme.primaryContainer,
+    //                contentColor = MaterialTheme.colorScheme.primary,
+    //            ) {
+    //                Text(
+    //                    modifier = Modifier
+    //                        .fillMaxWidth()
+    //                        .height(20.dp),
+    //                    textAlign = TextAlign.Center,
+    //                    text = "Por: Simon Lucena de Castro",
+    //                )
+    //            }
+    //        }
+        ) { innerPadding ->
+            Column(
+                modifier = Modifier
+                    .padding(innerPadding)
+                    .background(Color.White),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+            ) {
+                TelaConteudo()
+            }
+>>>>>>> Stashed changes
         }
     }
 }

@@ -46,7 +46,7 @@ fun TelaLogin(innerPadding: PaddingValues, onSigninClick: () -> Unit, onSignupCl
 
     var login by  remember{mutableStateOf("")}
     var senha by  remember{mutableStateOf("")}
-    var mensagemErro by remember { mutableStateOf<String?>("") }
+    var mensagemErro by remember { mutableStateOf<String?>(null) }
 
     Column(
         modifier = Modifier

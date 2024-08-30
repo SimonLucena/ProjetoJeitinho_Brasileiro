@@ -48,6 +48,9 @@ class MainActivity : ComponentActivity() {
                             TelaSignup(innerPadding,
                                 onSigninClick = {
                                     navController.navigate("login")
+                                },
+                                cancelarSignupClick = {
+                                    navController.navigate("login")
                                 }
                             )
                         }

@@ -113,7 +113,6 @@ fun TelaPrincipal(modifier: Modifier = Modifier, onLogoffClick: () -> Unit){
                     text = "Por: Simon Lucena de Castro",
                 )
             }
-<<<<<<< Updated upstream
         }
     ) { innerPadding ->
         Column(
@@ -123,7 +122,6 @@ fun TelaPrincipal(modifier: Modifier = Modifier, onLogoffClick: () -> Unit){
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             TelaConteudo()
-=======
         },
         gesturesEnabled = false
     ){

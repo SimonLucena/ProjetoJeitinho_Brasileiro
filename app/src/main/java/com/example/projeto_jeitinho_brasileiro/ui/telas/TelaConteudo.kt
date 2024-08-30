@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -31,8 +32,11 @@ fun TelaConteudo() {
     // Criar uma instância de Galeria
     val receita = Receitas()
 
-    receita.addReceita(Repositorio(0, "kelly_pool", "“Kelly Pool”", "Um grupo de seis cães se diverte ao redor de uma mesa de bilhar jogando Kelly Pool. Os outros cinco cães estão entusiasticamente importunando o jogador, na tentativa de melhorar sua própria posição.\nÉ interessante notar que Coolidge escolheu colocar os cães envolvidos em um jogo conhecido por apostas."))
-    receita.addReceita(Repositorio(1, "ten_miles_to_a_garage", "“Ten Miles To A Garage”", "Uma família de cães está a caminho de um piquenique de verão (talvez comemorando o dia 4 de julho) quando enfrenta problemas com o carro em um trecho solitário de uma estrada rural. Eles provavelmente estão na zona rural de Nova York, pois esse é o estado da placa do carro. Os filhotes brincam no carro usando bonés e carregando cestas de comida, enquanto a maioria dos cães mais velhos tenta consertar o automóvel. Porém, normalmente, apenas um cachorro rastejou para baixo do carro e está realmente trabalhando com ferramentas, enquanto outros três ficam sentados de braços cruzados. Um deles está até deitado debaixo do carro, relaxando à sua sombra. Todos os cães adultos também aproveitaram a parada não programada para fumar um cigarro."))
+    receita.addReceita(Repositorio(0, "pacoca", "Paçoca Nordestina", "Que tal preparar uma paçoca de carne de sol, delicioso e inusitado acompanhamento? \n Trata-se de uma farofa salgada, prato perfeito para a sua refeição de domingo."))
+    receita.addReceita(Repositorio(1, "feijao_tropeiro", "Feijão Tropeiro", "O Feijão tropeiro mineiro, é um prato que leva feijão-carioca, bacon, calabresa, couve, ovos e farinha de mandioca."))
+    receita.addReceita(Repositorio(2, "camarao_moranga", "Camarão na moranga", "Perfeito para ocasiões especiais e para impressionar os convidados, o camarão na moranga é um prato que combina simplicidade com sofisticação, \n trazendo à mesa um pedacinho da riqueza da culinária brasileira."))
+    receita.addReceita(Repositorio(3, "mousse_maracuja", "Mousse de Maracujá", "A combinação equilibrada entre a acidez característica do maracujá e a suavidade dos laticínios torna esta sobremesa um verdadeiro deleite para o paladar."))
+    receita.addReceita(Repositorio(4, "biscoito_para", "Biscoito de Castanha-do-Pará", "Imagine o sabor autêntico da Amazônia em cada mordida. \n Os Biscoitos de Castanha do Pará são uma verdadeira joia da culinária brasileira em um lanche simples."))
 
     Column(
         modifier = Modifier
@@ -41,16 +45,18 @@ fun TelaConteudo() {
             .verticalScroll(rememberScrollState())
             .background(Color.White)
     ) {
-        for (item in receita.getListaRepositorio()){
+        for (item in receita.getListaRepositorio()) {
             val arquivo = receita.getArquivo(item.indice)
             val titulo = receita.getTitulo(item.indice)
             val descricao = receita.getDescricao(item.indice)
 
-            // Mapeia o título para o ID do recurso correspondente
             val resourceId = when (arquivo) {
-                "kelly_pool" -> R.drawable.kelly_pool
-                "ten_miles_to_a_garage" -> R.drawable.ten_miles_to_a_garage
-                else -> R.drawable.kelly_pool// R.drawable.kelly_pool // Um recurso de imagem padrão para quando não há correspondência
+                "pacoca" -> R.drawable.pacoca
+                "feijao_tropeiro" -> R.drawable.feijao_tropeiro
+                "camarao_moranga" -> R.drawable.camarao_moranga
+                "mousse_maracuja" -> R.drawable.mousse_maracuja
+                "biscoito_para" -> R.drawable.biscoito_para
+                else -> R.drawable.kelly_pool
             }
 
             Card(
@@ -59,59 +65,37 @@ fun TelaConteudo() {
                     .padding(PaddingValues(bottom = 8.dp))
             ) {
                 Row {
-                    Column(modifier = Modifier.weight(2f)) {
-                        Image(
-                            painter = painterResource(id = resourceId),
-                            contentDescription = "Example Image",
-                            modifier = Modifier
-                                .width(400.dp)
-                                .padding(16.dp)
-                        )
-                    }
+                    Image(
+                        painter = painterResource(id = resourceId),
+                        contentDescription = "Imagem",
+                        modifier = Modifier
+                            .fillMaxWidth(0.5f)
+                            .aspectRatio(1f)
+                            .padding(16.dp)
+                    )
                     Column(
                         modifier = Modifier
-                            .weight(2f)
+                            .padding(16.dp)
                             .align(Alignment.CenterVertically)
                     ) {
-                        Row {
-                            Text(
-                                text = titulo!!,
-                                style = TextStyle(
-                                    fontSize = 24.sp
-                                )
+                        Text(
+                            text = titulo!!,
+                            style = TextStyle(
+                                fontSize = 20.sp,
+                                color = Color.White
                             )
-                        }
+                        )
+                        Text(
+                            text = descricao!!,
+                            style = TextStyle(
+                                fontSize = 14.sp,
+                                color = Color.LightGray
+                            ),
+                            modifier = Modifier.padding(top = 8.dp)
+                        )
                     }
                 }
             }
-
-//            Card(
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .padding(PaddingValues(bottom = 8.dp))
-//            ) {
-//                Column(
-//                    modifier = Modifier
-//                        .weight(1f)
-//                ) {
-//                    Image(
-//                        painter = painterResource(id = resourceId),
-//                        contentDescription = "Imagem",
-//                        modifier = Modifier
-//                            .padding(2.dp)
-//                            .width(1.dp)
-//                            .height(1.dp)
-//                    )
-//                }
-////                Column(modifier = Modifier.weight(2f)) {
-////                    Row {
-////                        Text(text = titulo!!)
-////                    }
-////                    Row {
-////                        Text(text = descricao!!)
-////                    }
-////                }
-//            }
         }
     }
 }

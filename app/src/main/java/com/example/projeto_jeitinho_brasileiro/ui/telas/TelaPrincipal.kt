@@ -25,7 +25,6 @@ import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -36,7 +35,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.example.projeto_jeitinho_brasileiro.cadastro
 import com.example.projeto_jeitinho_brasileiro.repositorio.user.Usuario
 import kotlinx.coroutines.launch
 
@@ -58,12 +56,10 @@ fun TelaPrincipal(modifier: Modifier = Modifier, onLogoffClick: () -> Unit, usua
                         .fillMaxWidth()
                         .padding(16.dp)
                 ) {
-                    cadastro.getNome(0)?.let {
-                        Text(
-                            text = it,
-                            modifier = Modifier.weight(1f)
-                        )
-                    }
+                    Text(
+                        text = usuario.nome,
+                        modifier = Modifier.weight(1f)
+                    )
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack, // Replace with correct icon if needed
                         contentDescription = "Close Drawer",

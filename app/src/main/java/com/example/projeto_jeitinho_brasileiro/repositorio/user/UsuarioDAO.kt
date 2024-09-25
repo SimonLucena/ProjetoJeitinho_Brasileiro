@@ -1,5 +1,6 @@
 package com.example.projeto_jeitinho_brasileiro.repositorio.user
 
+import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.toObject
 import com.google.firebase.firestore.toObjects
@@ -29,6 +30,11 @@ class UsuarioDAO {
                 }
             }
             .addOnFailureListener {
+                callBack(null)
+            }
+            .addOnFailureListener { exception ->
+                // Optionally log the error for debugging
+                Log.e("FirestoreError", "Error fetching user by login", exception)
                 callBack(null)
             }
     }

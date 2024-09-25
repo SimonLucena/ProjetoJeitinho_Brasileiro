@@ -9,15 +9,19 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.projeto_jeitinho_brasileiro.repositorio.user.Cadastro
 import com.example.projeto_jeitinho_brasileiro.repositorio.user.Usuario
 import com.example.projeto_jeitinho_brasileiro.repositorio.user.UsuarioDAO
+import com.example.projeto_jeitinho_brasileiro.ViewModel.usuario.UsuarioViewModel
 import com.example.projeto_jeitinho_brasileiro.ui.telas.TelaLogin
 import com.example.projeto_jeitinho_brasileiro.ui.telas.TelaPrincipal
 import com.example.projeto_jeitinho_brasileiro.ui.telas.TelaSignup
@@ -31,15 +35,16 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             ProjetoJeitinho_BrasileiroTheme {
-                Scaffold(
-                    modifier = Modifier
-                        .fillMaxSize()
-                ) { innerPadding ->
+                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     val navController = rememberNavController()
+                    val viewmodel: UsuarioViewModel = viewModel()
+                    val usuarioState by viewmodel.usuario.collectAsState()
+
                     NavHost(navController = navController, startDestination = "login") {
                         composable("login") {
                             TelaLogin(innerPadding,
-                                onSigninClick = {
+                                onSigninClick = { usuario ->
+                                    viewmodel.login(usuario)
                                     navController.navigate("principal")
                                 },
                                 onSignupClick = {
@@ -51,6 +56,9 @@ class MainActivity : ComponentActivity() {
                             TelaSignup(innerPadding,
                                 onSigninClick = {
                                     navController.navigate("login")
+                                },
+                                cancelarSignupClick = {
+                                    navController.navigate("login")
                                 }
                             )
                         }
@@ -58,7 +66,7 @@ class MainActivity : ComponentActivity() {
                             TelaPrincipal(
                                 modifier = Modifier
                                     .padding(innerPadding)
-                                    .background( Color.White ),
+                                    .background(Color.White),
                                 onLogoffClick = {
                                     cadastro.removePerfil()
                                     navController.navigate("login")

@@ -3,10 +3,12 @@ package com.example.projeto_jeitinho_brasileiro.ui.telas
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -29,14 +31,16 @@ import com.example.projeto_jeitinho_brasileiro.repositorio.user.Cadastro
 import com.example.projeto_jeitinho_brasileiro.repositorio.user.Usuario
 import com.example.projeto_jeitinho_brasileiro.repositorio.user.UsuarioDAO
 import com.example.projeto_jeitinho_brasileiro.usuarioDAO
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @Composable
-fun TelaSignup(innerPadding: PaddingValues, onSigninClick: () -> Unit) {
+fun TelaSignup(innerPadding: PaddingValues, onSigninClick: () -> Unit, cancelarSignupClick: () -> Unit) {
     var user by  remember{ mutableStateOf<String?>("")}
     var login by  remember{mutableStateOf<String?>("")}
     var senha by  remember{mutableStateOf<String?>("")}
-    var mensagemErro by remember { mutableStateOf<String?>("") }
+    var mensagemErro by remember { mutableStateOf<String?>(null) }
 
     Column(
         modifier = Modifier
@@ -66,25 +70,37 @@ fun TelaSignup(innerPadding: PaddingValues, onSigninClick: () -> Unit) {
             Text(text = "Senha")
         })
         Spacer(modifier = Modifier.height(10.dp))
-        Button(onClick = {
-            when {
-                user.isNullOrEmpty() || login.isNullOrEmpty() || senha.isNullOrEmpty() -> {
-                    mensagemErro = "Preencha todos os campos"
-                }
-                else ->{
-                    usuarioDAO.buscarPorLogin(login!!, callBack = { usuario ->
-                        if(usuario != null && usuario.email == login){
-                            mensagemErro = "Login já existe"
+        Row {
+            Column {
+                Button(onClick = {
+                    when {
+                        user.isNullOrEmpty() || login.isNullOrEmpty() || senha.isNullOrEmpty() -> {
+                            mensagemErro = "Preencha todos os campos"
                         }
-                        else{
-                            usuarioDAO.cadastrarUsuarioDAO(user!!, login!!, senha!!)
-                            onSigninClick()
+                        else ->{
+                            usuarioDAO.buscarPorLogin(login!!, callBack = { usuario ->
+                                if(usuario != null && usuario.email == login){
+                                    mensagemErro = "Login já existe"
+                                }
+                                else{
+                                    usuarioDAO.cadastrarUsuarioDAO(user!!, login!!, senha!!)
+                                    onSigninClick()
+                                }
+                            })
                         }
-                    })
+                    }
+                }) {
+                    Text(text = "Cadastrar")
                 }
             }
-        }) {
-            Text(text = "Cadastrar")
+            Spacer(modifier = Modifier.width(10.dp))
+            Column {
+                Button(onClick = {
+                    cancelarSignupClick()
+                }) {
+                    Text(text = "Cancelar")
+                }
+            }
         }
 
         mensagemErro?.let {

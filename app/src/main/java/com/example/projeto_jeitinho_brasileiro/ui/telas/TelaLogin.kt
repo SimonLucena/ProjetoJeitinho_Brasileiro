@@ -9,10 +9,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -34,13 +32,12 @@ import com.example.projeto_jeitinho_brasileiro.repositorio.user.Cadastro
 import com.example.projeto_jeitinho_brasileiro.repositorio.user.Usuario
 import com.example.projeto_jeitinho_brasileiro.repositorio.user.UsuarioDAO
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 val usuarioDAO: UsuarioDAO = UsuarioDAO()
 val cadastro = Cadastro()
 @Composable
-fun TelaLogin(innerPadding: PaddingValues, onSigninClick: () -> Unit, onSignupClick: () -> Unit) {
+fun TelaLogin(innerPadding: PaddingValues, onSigninClick: (Usuario) -> Unit, onSignupClick: () -> Unit) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
 
@@ -78,8 +75,9 @@ fun TelaLogin(innerPadding: PaddingValues, onSigninClick: () -> Unit, onSignupCl
                     scope.launch(Dispatchers.IO) {
                         usuarioDAO.buscarPorLogin(login, callBack = { usuario ->
                             if(usuario != null && usuario.senha == senha){
-                                cadastro.addPerfil(Usuario(0, usuario.nome, usuario.email, usuario.senha))
-                                onSigninClick()
+                                val usuarioLogin = Usuario(0, usuario.nome, usuario.email, usuario.senha)
+                                cadastro.addPerfil(usuarioLogin)
+                                onSigninClick(usuarioLogin)
                             }else{
                                 mensagemErro = "Login ou senha inválidos"
                             }

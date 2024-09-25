@@ -37,11 +37,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.projeto_jeitinho_brasileiro.cadastro
+import com.example.projeto_jeitinho_brasileiro.repositorio.user.Usuario
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TelaPrincipal(modifier: Modifier = Modifier, onLogoffClick: () -> Unit){
+fun TelaPrincipal(modifier: Modifier = Modifier, onLogoffClick: () -> Unit, usuario: Usuario){
     var menuExpanded by remember {
         mutableStateOf(false)
     }

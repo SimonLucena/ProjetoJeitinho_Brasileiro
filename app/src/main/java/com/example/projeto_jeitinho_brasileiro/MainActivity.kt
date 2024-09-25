@@ -63,15 +63,18 @@ class MainActivity : ComponentActivity() {
                             )
                         }
                         composable("principal") {
-                            TelaPrincipal(
-                                modifier = Modifier
-                                    .padding(innerPadding)
-                                    .background(Color.White),
-                                onLogoffClick = {
-                                    cadastro.removePerfil()
-                                    navController.navigate("login")
-                                }
-                            )
+                            usuarioState?.let { it1 ->
+                                TelaPrincipal(
+                                    modifier = Modifier
+                                        .padding(innerPadding)
+                                        .background(Color.White),
+                                    onLogoffClick = {
+                                        cadastro.removePerfil()
+                                        navController.navigate("login")
+                                    },
+                                    usuario = it1
+                                )
+                            }
                         }
                     }
                 }

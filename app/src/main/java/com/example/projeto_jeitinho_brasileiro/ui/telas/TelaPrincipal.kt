@@ -10,10 +10,18 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ExitToApp
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.Divider
+import androidx.compose.material3.DrawerState
+import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -35,6 +43,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.example.projeto_jeitinho_brasileiro.R
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.graphics.vector.ImageVector
+import com.example.projeto_jeitinho_brasileiro.cadastro
+import com.example.projeto_jeitinho_brasileiro.repositorio.user.Cadastro
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -94,6 +109,9 @@ fun TelaPrincipal(modifier: Modifier = Modifier, onLogoffClick: () -> Unit){
                         }) {
                             Icon(imageVector = Icons.Filled.Menu, contentDescription = "Menu" )
                         }
+                    }
+                )
+            }
                     },
                     actions = {
                         IconButton(onClick = { /* do something */ }) {
@@ -104,21 +122,7 @@ fun TelaPrincipal(modifier: Modifier = Modifier, onLogoffClick: () -> Unit){
                         }
                     }
                 )
-            }//,
-            //        bottomBar = {
-            //            BottomAppBar(
-            //                containerColor = MaterialTheme.colorScheme.primaryContainer,
-            //                contentColor = MaterialTheme.colorScheme.primary,
-            //            ) {
-            //                Text(
-            //                    modifier = Modifier
-            //                        .fillMaxWidth()
-            //                        .height(20.dp),
-            //                    textAlign = TextAlign.Center,
-            //                    text = "Por: Simon Lucena de Castro",
-            //                )
-            //            }
-            //        }
+            }
         ) { innerPadding ->
             Column(
                 modifier = Modifier

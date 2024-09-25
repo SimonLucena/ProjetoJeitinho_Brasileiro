@@ -28,14 +28,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.projeto_jeitinho_brasileiro.cadastro
 import com.example.projeto_jeitinho_brasileiro.repositorio.user.Cadastro
 import com.example.projeto_jeitinho_brasileiro.repositorio.user.Usuario
 import com.example.projeto_jeitinho_brasileiro.repositorio.user.UsuarioDAO
+import com.example.projeto_jeitinho_brasileiro.usuarioDAO
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-val usuarioDAO: UsuarioDAO = UsuarioDAO()
-val cadastro = Cadastro()
+
 @Composable
 fun TelaLogin(innerPadding: PaddingValues, onSigninClick: (Usuario) -> Unit, onSignupClick: () -> Unit) {
     val context = LocalContext.current
@@ -61,7 +62,7 @@ fun TelaLogin(innerPadding: PaddingValues, onSigninClick: (Usuario) -> Unit, onS
             ),
             text = "Login"
         )
-        TextField(value = login, onValueChange = {login = it}, placeholder = {
+        TextField(value = login, onValueChange = {login = it.trim()}, placeholder = {
             Text(text = "E-mail")
         })
         Spacer(modifier = Modifier.height(10.dp))
@@ -97,13 +98,8 @@ fun TelaLogin(innerPadding: PaddingValues, onSigninClick: (Usuario) -> Unit, onS
             }
         }
         mensagemErro?.let {
-//            Text(
-//                text = it,
-//                color = MaterialTheme.colorScheme.error
-//            )
             LaunchedEffect(it) {
                 Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
-//                delay(5000)
                 mensagemErro = null
             }
         }

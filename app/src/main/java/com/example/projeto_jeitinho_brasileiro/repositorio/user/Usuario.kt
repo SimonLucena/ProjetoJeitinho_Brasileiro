@@ -4,10 +4,14 @@ data class Usuario(val indice:Int = 0, val nome:String = "", val email:String = 
 }
 
 class Cadastro {
-    private val cadastro = mutableListOf<Usuario>()
+    private var cadastro = mutableListOf<Usuario>()
 
     fun addPerfil(user: Usuario) {
         cadastro.add(user)
+    }
+
+    fun removePerfil() {
+        cadastro.clear()
     }
 
     fun getListaUsuario(): List<Usuario>{

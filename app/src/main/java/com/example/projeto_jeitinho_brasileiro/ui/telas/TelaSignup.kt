@@ -27,20 +27,19 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.projeto_jeitinho_brasileiro.repositorio.user.Cadastro
-import com.example.projeto_jeitinho_brasileiro.repositorio.user.Usuario
-import com.example.projeto_jeitinho_brasileiro.repositorio.user.UsuarioDAO
-import com.example.projeto_jeitinho_brasileiro.usuarioDAO
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 @Composable
-fun TelaSignup(innerPadding: PaddingValues, onSigninClick: () -> Unit, cancelarSignupClick: () -> Unit) {
+fun TelaSignup(
+    innerPadding: PaddingValues,
+    onSigninClick: () -> Unit,
+    signupClick: (String, String, String) -> Unit,
+    erro: String?
+) {
     var user by  remember{ mutableStateOf<String?>("")}
     var login by  remember{mutableStateOf<String?>("")}
     var senha by  remember{mutableStateOf<String?>("")}
-    var mensagemErro by remember { mutableStateOf<String?>(null) }
+    var mensagemErro by  remember{mutableStateOf<String?>(erro)}
 
     Column(
         modifier = Modifier
@@ -58,7 +57,7 @@ fun TelaSignup(innerPadding: PaddingValues, onSigninClick: () -> Unit, cancelarS
             ),
             text = "Cadastro"
         )
-        OutlinedTextField(value = user.toString(), onValueChange = {user = it.ifEmpty { null }}, placeholder = {
+        OutlinedTextField(value = user.toString(), onValueChange = {user = it}, placeholder = {
             Text(text = "Usuário")
         })
         Spacer(modifier = Modifier.height(10.dp))
@@ -78,15 +77,7 @@ fun TelaSignup(innerPadding: PaddingValues, onSigninClick: () -> Unit, cancelarS
                             mensagemErro = "Preencha todos os campos"
                         }
                         else ->{
-                            usuarioDAO.buscarPorLogin(login!!, callBack = { usuario ->
-                                if(usuario != null && usuario.email == login){
-                                    mensagemErro = "Login já existe"
-                                }
-                                else{
-                                    usuarioDAO.cadastrarUsuarioDAO(user!!, login!!, senha!!)
-                                    onSigninClick()
-                                }
-                            })
+                            signupClick(user!!, login!!, senha!!)
                         }
                     }
                 }) {
@@ -96,7 +87,7 @@ fun TelaSignup(innerPadding: PaddingValues, onSigninClick: () -> Unit, cancelarS
             Spacer(modifier = Modifier.width(10.dp))
             Column {
                 Button(onClick = {
-                    cancelarSignupClick()
+                    onSigninClick()
                 }) {
                     Text(text = "Cancelar")
                 }

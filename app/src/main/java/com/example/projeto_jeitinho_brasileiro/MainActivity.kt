@@ -11,6 +11,9 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
@@ -18,21 +21,17 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-<<<<<<< Updated upstream
 import com.example.projeto_jeitinho_brasileiro.repositorio.user.Cadastro
 import com.example.projeto_jeitinho_brasileiro.repositorio.user.Usuario
-=======
 import com.example.projeto_jeitinho_brasileiro.viewModel.usuario.UsuarioViewModel
->>>>>>> Stashed changes
 import com.example.projeto_jeitinho_brasileiro.repositorio.user.UsuarioDAO
 import com.example.projeto_jeitinho_brasileiro.ViewModel.usuario.UsuarioViewModel
+import com.example.projeto_jeitinho_brasileiro.repositorio.user.UsuarioDAO
 import com.example.projeto_jeitinho_brasileiro.ui.telas.TelaLogin
 import com.example.projeto_jeitinho_brasileiro.ui.telas.TelaPrincipal
 import com.example.projeto_jeitinho_brasileiro.ui.telas.TelaSignup
 import com.example.projeto_jeitinho_brasileiro.ui.theme.ProjetoJeitinho_BrasileiroTheme
 
-val usuarioDAO: UsuarioDAO = UsuarioDAO()
-val cadastro = Cadastro()
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,6 +40,7 @@ class MainActivity : ComponentActivity() {
             ProjetoJeitinho_BrasileiroTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     val navController = rememberNavController()
+                    val usuarioDAO = UsuarioDAO()
                     val viewmodel: UsuarioViewModel = viewModel()
                     val usuarioState by viewmodel.usuario.collectAsState()
 
@@ -57,25 +57,38 @@ class MainActivity : ComponentActivity() {
                             )
                         }
                         composable("signup") {
+                            // Define state variables
+                            var erro by remember { mutableStateOf<String?>(null) }
+
                             TelaSignup(innerPadding,
-                                onSigninClick = {
-                                    navController.navigate("login")
+                                onSigninClick = { navController.navigate("login") },
+                                signupClick = { user, login, senha ->
+                                    usuarioDAO.buscarPorLogin(login!!, callBack = { usuario ->
+                                        if(usuario != null && usuario.email == login){
+                                            erro = "Login já existe"
+                                        }
+                                        else{
+                                            usuarioDAO.cadastrarUsuarioDAO(user, login, senha)
+                                            navController.navigate("login")
+                                        }
+                                    })
                                 },
-                                cancelarSignupClick = {
-                                    navController.navigate("login")
-                                }
+                                erro = erro
                             )
                         }
                         composable("principal") {
-                            TelaPrincipal(
-                                modifier = Modifier
-                                    .padding(innerPadding)
-                                    .background(Color.White),
-                                onLogoffClick = {
-                                    cadastro.removePerfil()
-                                    navController.navigate("login")
-                                }
-                            )
+                            usuarioState?.let { it1 ->
+                                TelaPrincipal(
+                                    modifier = Modifier
+                                        .padding(innerPadding)
+                                        .background(Color.White),
+                                    onLogoffClick = {
+                                        viewmodel.logout()
+                                        navController.navigate("login")
+                                    },
+                                    usuario = it1
+                                )
+                            }
                         }
                     }
                 }

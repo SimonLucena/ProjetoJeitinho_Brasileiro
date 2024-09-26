@@ -28,17 +28,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.projeto_jeitinho_brasileiro.cadastro
-import com.example.projeto_jeitinho_brasileiro.repositorio.user.Cadastro
 import com.example.projeto_jeitinho_brasileiro.repositorio.user.Usuario
 import com.example.projeto_jeitinho_brasileiro.repositorio.user.UsuarioDAO
-import com.example.projeto_jeitinho_brasileiro.usuarioDAO
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 
 @Composable
 fun TelaLogin(innerPadding: PaddingValues, onSigninClick: (Usuario) -> Unit, onSignupClick: () -> Unit) {
+    val usuarioDAO: UsuarioDAO = UsuarioDAO()
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
 
@@ -77,10 +75,10 @@ fun TelaLogin(innerPadding: PaddingValues, onSigninClick: (Usuario) -> Unit, onS
                         usuarioDAO.buscarPorLogin(login, callBack = { usuario ->
                             if(usuario != null && usuario.senha == senha){
                                 val usuarioLogin = Usuario(0, usuario.nome, usuario.email, usuario.senha)
-                                cadastro.addPerfil(usuarioLogin)
+//                                cadastro.addPerfil(usuarioLogin)
                                 onSigninClick(usuarioLogin)
                             }else{
-                                mensagemErro = "Login ou senha inválidos"
+                                mensagemErro = "Login ou senha inválidos ${usuario?.nome}"
                             }
                         })
                     }

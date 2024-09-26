@@ -1,5 +1,4 @@
 package com.example.projeto_jeitinho_brasileiro
-
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -21,12 +20,10 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.projeto_jeitinho_brasileiro.repositorio.user.Cadastro
 import com.example.projeto_jeitinho_brasileiro.repositorio.user.Usuario
 import com.example.projeto_jeitinho_brasileiro.viewModel.usuario.UsuarioViewModel
 import com.example.projeto_jeitinho_brasileiro.repositorio.user.UsuarioDAO
-import com.example.projeto_jeitinho_brasileiro.ViewModel.usuario.UsuarioViewModel
-import com.example.projeto_jeitinho_brasileiro.repositorio.user.UsuarioDAO
+import com.example.projeto_jeitinho_brasileiro.ui.telas.TelaAbout
 import com.example.projeto_jeitinho_brasileiro.ui.telas.TelaLogin
 import com.example.projeto_jeitinho_brasileiro.ui.telas.TelaPrincipal
 import com.example.projeto_jeitinho_brasileiro.ui.telas.TelaSignup
@@ -90,12 +87,24 @@ class MainActivity : ComponentActivity() {
                                 )
                             }
                         }
+                        composable("informacoes") {
+                            usuarioState?.let { usuario ->
+                                TelaAbout(
+                                    usuario = usuario,
+                                    onLogoffClick = {
+                                        viewmodel.logout()
+                                        navController.navigate("login")
+                                    }
+                                )
+                            }
+                        }
                     }
                 }
             }
         }
     }
 }
+
 
 @Composable
 fun Greeting(modifier: Modifier = Modifier) {

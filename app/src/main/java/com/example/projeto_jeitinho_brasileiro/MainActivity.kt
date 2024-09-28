@@ -23,6 +23,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.projeto_jeitinho_brasileiro.ViewModel.usuario.UsuarioViewModel
 import com.example.projeto_jeitinho_brasileiro.repositorio.user.UsuarioDAO
+import com.example.projeto_jeitinho_brasileiro.ui.telas.TelaAbout
 import com.example.projeto_jeitinho_brasileiro.ui.telas.TelaLogin
 import com.example.projeto_jeitinho_brasileiro.ui.telas.TelaPrincipal
 import com.example.projeto_jeitinho_brasileiro.ui.telas.TelaSignup
@@ -82,7 +83,27 @@ class MainActivity : ComponentActivity() {
                                         viewmodel.logout()
                                         navController.navigate("login")
                                     },
+                                    onUserClick = {
+                                        navController.navigate("sobreUsuario")
+                                    },
                                     usuario = it1
+                                )
+                            }
+                        }
+                        composable("sobreUsuario") {
+                            usuarioState?.let { it1 ->
+                                TelaAbout(
+                                    modifier = Modifier
+                                        .padding(innerPadding)
+                                        .background(Color.White),
+                                    onLogoffClick = {
+                                        viewmodel.logout()
+                                        navController.navigate("login")
+                                    },
+                                    usuario = it1,
+                                    onBackClick = {
+                                        navController.navigate("principal")
+                                    }
                                 )
                             }
                         }

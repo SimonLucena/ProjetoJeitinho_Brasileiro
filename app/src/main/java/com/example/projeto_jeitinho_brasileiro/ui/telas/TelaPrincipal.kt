@@ -40,7 +40,12 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TelaPrincipal(modifier: Modifier = Modifier, onLogoffClick: () -> Unit, usuario: Usuario){
+fun TelaPrincipal(
+    modifier: Modifier = Modifier,
+    onLogoffClick: () -> Unit,
+    usuario: Usuario,
+    onUserClick: () -> Unit
+){
     var menuExpanded by remember {
         mutableStateOf(false)
     }
@@ -67,6 +72,11 @@ fun TelaPrincipal(modifier: Modifier = Modifier, onLogoffClick: () -> Unit, usua
                     )
                 }
                 Divider()
+                NavigationDrawerItem(
+                    label = { Text(text = "Usuário") },
+                    selected = false,
+                    onClick = { onUserClick() }
+                )
                 Spacer(modifier = Modifier.weight(1f))
                 NavigationDrawerItem(
                     label = { Text(text = "Sair") },

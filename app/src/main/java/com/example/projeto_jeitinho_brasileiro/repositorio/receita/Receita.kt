@@ -2,7 +2,12 @@ package com.example.projeto_jeitinho_brasileiro.repositorio.receita
 
 import com.example.projeto_jeitinho_brasileiro.repositorio.conteudo.Repositorio
 
-class Receita(val indice: Int, var arquivo: String, var nome: String, var descricao: String) {
+data class Receita(
+    val indice: Int = 0,
+    var arquivo: String = "",
+    var descricao: String = "",
+    var nome: String = ""
+) {
 
 }
 

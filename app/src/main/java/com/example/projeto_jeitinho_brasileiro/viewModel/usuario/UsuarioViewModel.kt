@@ -1,4 +1,4 @@
-package com.example.projeto_jeitinho_brasileiro.viewModel.usuario
+package com.example.projeto_jeitinho_brasileiro.ViewModel.usuario
 
 import androidx.lifecycle.ViewModel
 import com.example.projeto_jeitinho_brasileiro.repositorio.user.Usuario

@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
@@ -31,43 +30,26 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.projeto_jeitinho_brasileiro.repositorio.conteudo.Receitas
-import com.example.projeto_jeitinho_brasileiro.repositorio.conteudo.Repositorio
-import com.example.projeto_jeitinho_brasileiro.R
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.projeto_jeitinho_brasileiro.R
 import com.example.projeto_jeitinho_brasileiro.repositorio.receita.Receita
-import com.example.projeto_jeitinho_brasileiro.repositorio.receita.ReceitaDAO
-import com.example.projeto_jeitinho_brasileiro.repositorio.receita.Receitas
-import com.example.projeto_jeitinho_brasileiro.viewModel.receita.ReceitaViewModel
-import com.example.projeto_jeitinho_brasileiro.R
-import com.example.projeto_jeitinho_brasileiro.repositorio.conteudo.Receitas
-import com.example.projeto_jeitinho_brasileiro.repositorio.conteudo.Repositorio
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.projeto_jeitinho_brasileiro.ViewModel.receita.ReceitaViewModel
 
 @Composable
 fun TelaConteudo() {
-    val viewModel: ReceitaViewModel = viewModel()
+    val viewModelReceitas: ReceitaViewModel = viewModel()
     var receitas by remember { mutableStateOf<List<Receita>?>(null) }
 
-    LaunchedEffect(Unit) {
-        viewModel.fetchReceitas { fetchedReceitas: List<Receita>? ->
+    LaunchedEffect(viewModelReceitas) {
+        viewModelReceitas.fetchReceitas { fetchedReceitas: List<Receita>? ->
             receitas = fetchedReceitas
         }
     }
-
-
-
-//    receita.addReceita(Repositorio(0, "pacoca", "Paçoca Nordestina", "Que tal preparar uma paçoca de carne de sol, delicioso e inusitado acompanhamento? \n Trata-se de uma farofa salgada, prato perfeito para a sua refeição de domingo."))
-//    receita.addReceita(Repositorio(1, "feijao_tropeiro", "Feijão Tropeiro", "O Feijão tropeiro mineiro, é um prato que leva feijão-carioca, bacon, calabresa, couve, ovos e farinha de mandioca."))
-//    receita.addReceita(Repositorio(2, "camarao_moranga", "Camarão na moranga", "Perfeito para ocasiões especiais e para impressionar os convidados, o camarão na moranga é um prato que combina simplicidade com sofisticação, \n trazendo à mesa um pedacinho da riqueza da culinária brasileira."))
-//    receita.addReceita(Repositorio(3, "mousse_maracuja", "Mousse de Maracujá", "A combinação equilibrada entre a acidez característica do maracujá e a suavidade dos laticínios torna esta sobremesa um verdadeiro deleite para o paladar."))
-//    receita.addReceita(Repositorio(4, "biscoito_para", "Biscoito de Castanha-do-Pará", "Imagine o sabor autêntico da Amazônia em cada mordida. \n Os Biscoitos de Castanha do Pará são uma verdadeira joia da culinária brasileira em um lanche simples."))
 
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
             .padding(8.dp)
-//            .verticalScroll(rememberScrollState())
             .background(Color.White)
     ) {
         receitas?.let { list ->
@@ -112,14 +94,14 @@ fun TelaConteudo() {
                                 .align(Alignment.CenterVertically)
                         ) {
                             Text(
-                                text = titulo!!,
+                                text = titulo ?: "Título indisponível",
                                 style = TextStyle(
                                     fontSize = 20.sp,
                                     color = Color.Black
                                 )
                             )
                             Text(
-                                text = descricao!!,
+                                text = descricao ?: "Descrição indisponível",
                                 style = TextStyle(
                                     fontSize = 14.sp,
                                     color = Color.Gray
@@ -135,3 +117,10 @@ fun TelaConteudo() {
 //        }
     }
 }
+
+
+//    receita.addReceita(Repositorio(0, "pacoca", "Paçoca Nordestina", "Que tal preparar uma paçoca de carne de sol, delicioso e inusitado acompanhamento? \n Trata-se de uma farofa salgada, prato perfeito para a sua refeição de domingo."))
+//    receita.addReceita(Repositorio(1, "feijao_tropeiro", "Feijão Tropeiro", "O Feijão tropeiro mineiro, é um prato que leva feijão-carioca, bacon, calabresa, couve, ovos e farinha de mandioca."))
+//    receita.addReceita(Repositorio(2, "camarao_moranga", "Camarão na moranga", "Perfeito para ocasiões especiais e para impressionar os convidados, o camarão na moranga é um prato que combina simplicidade com sofisticação, \n trazendo à mesa um pedacinho da riqueza da culinária brasileira."))
+//    receita.addReceita(Repositorio(3, "mousse_maracuja", "Mousse de Maracujá", "A combinação equilibrada entre a acidez característica do maracujá e a suavidade dos laticínios torna esta sobremesa um verdadeiro deleite para o paladar."))
+//    receita.addReceita(Repositorio(4, "biscoito_para", "Biscoito de Castanha-do-Pará", "Imagine o sabor autêntico da Amazônia em cada mordida. \n Os Biscoitos de Castanha do Pará são uma verdadeira joia da culinária brasileira em um lanche simples."))

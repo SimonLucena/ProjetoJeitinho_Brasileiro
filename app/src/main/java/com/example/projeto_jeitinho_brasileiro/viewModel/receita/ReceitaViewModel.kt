@@ -1,4 +1,4 @@
-package com.example.projeto_jeitinho_brasileiro.viewModel.receita
+package com.example.projeto_jeitinho_brasileiro.ViewModel.receita
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

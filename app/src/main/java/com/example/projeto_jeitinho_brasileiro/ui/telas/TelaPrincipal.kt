@@ -39,14 +39,14 @@ import com.example.projeto_jeitinho_brasileiro.repositorio.user.Usuario
 import kotlinx.coroutines.launch
 import androidx.compose.material3.*
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TelaPrincipal(
     modifier: Modifier = Modifier,
     onLogoffClick: () -> Unit,
     usuario: Usuario,
-    onUserClick: () -> Unit
+    onUserClick: () -> Unit,
+    onCartClick: () -> Unit // Callback para o carrinho
 ){
     var menuExpanded by remember {
         mutableStateOf(false)
@@ -55,6 +55,7 @@ fun TelaPrincipal(
 
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
+
     if (showLogoffConfirmation) {
         AlertDialog(
             onDismissRequest = { showLogoffConfirmation = false },
@@ -75,6 +76,7 @@ fun TelaPrincipal(
             }
         )
     }
+
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
@@ -89,7 +91,7 @@ fun TelaPrincipal(
                         modifier = Modifier.weight(1f)
                     )
                     Icon(
-                        imageVector = Icons.AutoMirrored.Filled.ArrowBack, // Replace with correct icon if needed
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                         contentDescription = "Close Drawer",
                         modifier = Modifier.clickable { scope.launch { drawerState.close() } }
                     )
@@ -131,10 +133,11 @@ fun TelaPrincipal(
                         }
                     },
                     actions = {
-                        IconButton(onClick = { /* do something */ }) {
+                        // Navegação para o carrinho
+                        IconButton(onClick = onCartClick) {
                             Icon(
                                 imageVector = Icons.Filled.ShoppingCart,
-                                contentDescription = "Shopping Cart"
+                                contentDescription = "Carrinho"
                             )
                         }
                     }

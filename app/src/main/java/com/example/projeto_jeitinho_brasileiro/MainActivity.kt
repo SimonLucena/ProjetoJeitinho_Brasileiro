@@ -8,7 +8,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -16,7 +15,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -24,6 +22,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.projeto_jeitinho_brasileiro.ViewModel.usuario.UsuarioViewModel
 import com.example.projeto_jeitinho_brasileiro.repositorio.user.UsuarioDAO
 import com.example.projeto_jeitinho_brasileiro.ui.telas.TelaAbout
+import com.example.projeto_jeitinho_brasileiro.ui.telas.TelaCart
 import com.example.projeto_jeitinho_brasileiro.ui.telas.TelaLogin
 import com.example.projeto_jeitinho_brasileiro.ui.telas.TelaPrincipal
 import com.example.projeto_jeitinho_brasileiro.ui.telas.TelaSignup
@@ -54,17 +53,15 @@ class MainActivity : ComponentActivity() {
                             )
                         }
                         composable("signup") {
-                            // Define state variables
                             var erro by remember { mutableStateOf<String?>(null) }
 
                             TelaSignup(innerPadding,
                                 onSigninClick = { navController.navigate("login") },
                                 signupClick = { user, login, senha ->
                                     usuarioDAO.buscarPorLogin(login!!, callBack = { usuario ->
-                                        if(usuario != null && usuario.email == login){
+                                        if (usuario != null && usuario.email == login) {
                                             erro = "Login já existe"
-                                        }
-                                        else{
+                                        } else {
                                             usuarioDAO.cadastrarUsuarioDAO(user, login, senha)
                                             navController.navigate("login")
                                         }
@@ -85,6 +82,9 @@ class MainActivity : ComponentActivity() {
                                     },
                                     onUserClick = {
                                         navController.navigate("sobreUsuario")
+                                    },
+                                    onCartClick = {
+                                        navController.navigate("carrinho") // Navegação para o carrinho
                                     },
                                     usuario = it1
                                 )
@@ -107,25 +107,17 @@ class MainActivity : ComponentActivity() {
                                 )
                             }
                         }
+                        // Rota para o carrinho
+                        composable("carrinho") {
+                            TelaCart(
+                                onCheckoutClick = {
+                                    navController.navigate("principal") // Ação após finalizar compra
+                                }
+                            )
+                        }
                     }
                 }
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(modifier: Modifier = Modifier) {
-//    Text(
-//        text = "Hello $name!",
-//        modifier = modifier
-//    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    ProjetoJeitinho_BrasileiroTheme {
-//        Greeting("Android")
     }
 }

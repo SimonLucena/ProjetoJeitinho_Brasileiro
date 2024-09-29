@@ -37,6 +37,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.projeto_jeitinho_brasileiro.repositorio.user.Usuario
 import kotlinx.coroutines.launch
+import androidx.compose.material3.*
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -49,9 +51,30 @@ fun TelaPrincipal(
     var menuExpanded by remember {
         mutableStateOf(false)
     }
+    var showLogoffConfirmation by remember { mutableStateOf(false) }
 
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
+    if (showLogoffConfirmation) {
+        AlertDialog(
+            onDismissRequest = { showLogoffConfirmation = false },
+            title = { Text("Deseja sair?") },
+            text = { Text("Tem certeza que deseja voltar para o login?") },
+            confirmButton = {
+                TextButton(onClick = {
+                    showLogoffConfirmation = false
+                    onLogoffClick()
+                }) {
+                    Text("Sim")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showLogoffConfirmation = false }) {
+                    Text("Não")
+                }
+            }
+        )
+    }
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
@@ -81,7 +104,7 @@ fun TelaPrincipal(
                 NavigationDrawerItem(
                     label = { Text(text = "Sair") },
                     selected = false,
-                    onClick = { onLogoffClick() }
+                    onClick = { showLogoffConfirmation = true }
                 )
             }
         },

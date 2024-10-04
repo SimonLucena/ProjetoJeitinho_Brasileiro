@@ -2,9 +2,19 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-permission android:name="android.permission.CAMERA"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <!-- Permissão para usar a câmera em todas as versões -->
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <!-- Permissões necessárias apenas para versões anteriores ao Android 14 (API 34) -->
+    <uses-permission
+        android:name="android.permission.READ_MEDIA_IMAGES"
+        android:required="false"
+        android:maxSdkVersion="33" />
+
+    <uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:required="false"
+        android:maxSdkVersion="32" />
 
     <uses-feature
         android:name="android.hardware.camera"

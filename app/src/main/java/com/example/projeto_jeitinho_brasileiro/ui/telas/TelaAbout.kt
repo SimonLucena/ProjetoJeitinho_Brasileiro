@@ -3,6 +3,7 @@ package com.example.projeto_jeitinho_brasileiro.ui.telas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -46,7 +47,8 @@ fun TelaAbout(
     modifier: Modifier = Modifier,
     usuario: Usuario,
     onLogoffClick: () -> Unit,
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    onImageClick: () -> Unit // Callback para quando a imagem de perfil é clicada
 ) {
     var showLogoffConfirmation by remember { mutableStateOf(false) }
 
@@ -87,13 +89,15 @@ fun TelaAbout(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            // Imagem de perfil interativa
             Image(
                 painter = painterResource(id = R.drawable.silhueta_perfil),
                 contentDescription = "Imagem de perfil",
                 modifier = Modifier
                     .size(128.dp)
                     .clip(CircleShape)
-                    .border(2.dp, MaterialTheme.colorScheme.primary, CircleShape),
+                    .border(2.dp, MaterialTheme.colorScheme.primary, CircleShape)
+                    .clickable { onImageClick() }, // Torna a imagem clicável
                 contentScale = ContentScale.Crop
             )
 
@@ -126,6 +130,7 @@ fun TelaAbout(
             }
         }
     }
+
     if (showLogoffConfirmation) {
         AlertDialog(
             onDismissRequest = { showLogoffConfirmation = false },
@@ -146,5 +151,4 @@ fun TelaAbout(
             }
         )
     }
-
 }

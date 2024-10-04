@@ -1,6 +1,6 @@
 package com.example.projeto_jeitinho_brasileiro.repositorio.user
 
-data class Usuario(val indice:Int = 0, val nome:String = "", val email:String = "", val senha:String = "") {
+data class Usuario(val indice:String = "", val nome:String = "", val email:String = "", val senha:String = "") {
 }
 
 //class Cadastro {

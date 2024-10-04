@@ -7,5 +7,7 @@ data class Receita(
     var arquivo: String = "",
     var descricao: String = "",
     var nome: String = "",
-    var preco: Float
-) {}
+    var preco: Double = 0.0
+) {
+    constructor() : this(0, "", "", "", 0.0)
+}

@@ -147,6 +147,9 @@ class MainActivity : ComponentActivity() {
                                 val usuarioId = it1.indice
 
                                 TelaCart(
+                                    modifier = Modifier
+                                        .padding(innerPadding)
+                                        .background(Color.White),
                                     usuarioId = usuarioId,
                                     viewModel = cartViewModel,
                                     receitaDAO = receitaDAO,

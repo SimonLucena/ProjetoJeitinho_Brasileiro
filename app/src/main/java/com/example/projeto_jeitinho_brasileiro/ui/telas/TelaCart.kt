@@ -49,6 +49,7 @@ data class CartItem(
 
 @Composable
 fun TelaCart(
+    modifier: Modifier,
     usuarioId: String,
     viewModel: CartViewModel,
     receitaDAO: ReceitaDAO,
@@ -78,7 +79,7 @@ fun TelaCart(
         Text("Carregando carrinho...")
     } else {
         Column(
-            modifier = Modifier
+            modifier = modifier
                 .fillMaxSize()
                 .background(Color(0xFFFFF176)) // Fundo amarelo claro
                 .padding(16.dp)
@@ -104,7 +105,7 @@ fun TelaCart(
                     val (nomeReceita, precoReceita) = receitasMap[item.receita_id] ?: Pair("Receita Desconhecida", 0.0)
 
                     CartItemCard(
-                        cartItem = item,
+                        cartItem = item.copy(receita_id = nomeReceita), // Agora estamos usando o nome da receita no lugar do id
                         receitaPreco = precoReceita, // Passa o preço correto da receita
                         onIncreaseQuantity = {
                             viewModel.updateItemQuantity(usuarioId, item.id, item.quantidade + 1)

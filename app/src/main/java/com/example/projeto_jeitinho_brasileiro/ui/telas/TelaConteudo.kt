@@ -23,15 +23,21 @@ import androidx.compose.ui.unit.sp
 import com.example.projeto_jeitinho_brasileiro.R
 import com.example.projeto_jeitinho_brasileiro.repositorio.receita.Receita
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.projeto_jeitinho_brasileiro.ViewModel.Carrinho.CartViewModel
 import com.example.projeto_jeitinho_brasileiro.ViewModel.receita.ReceitaViewModel
 
 // Carregando a fonte Oswald do Google Fonts
 
 @Composable
-fun TelaConteudo() {
+fun TelaConteudo(
+    usuarioId: String,
+    viewModelReceitas: ReceitaViewModel = viewModel(),
+    cartViewModel: CartViewModel = viewModel()
+) {
     val viewModelReceitas: ReceitaViewModel = viewModel()
     var receitas by remember { mutableStateOf<List<Receita>?>(null) }
 
+    // Fetch as receitas do banco de dados
     LaunchedEffect(viewModelReceitas) {
         viewModelReceitas.fetchReceitas { fetchedReceitas: List<Receita>? ->
             receitas = fetchedReceitas
@@ -67,7 +73,17 @@ fun TelaConteudo() {
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(PaddingValues(bottom = 8.dp))
-                        .clickable { /* Ação ao clicar no item */ }
+                        .clickable {
+                            cartViewModel.addItemToCart(
+                                usuarioId,
+                                CartItem(
+                                    id = null, // Pode ser gerado automaticamente no Firestore
+                                    receita_id = receita.id ?: "",
+                                    quantidade = 1,
+                                    price = receita.preco ?: 0.0
+                                )
+                            )
+                        }
                 ) {
                     Row(
                         modifier = Modifier

@@ -12,6 +12,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.projeto_jeitinho_brasileiro.repositorio.user.Usuario
 import kotlinx.coroutines.launch
 
@@ -126,7 +127,10 @@ fun TelaPrincipal(
                     .background(Color.White), // Fundo branco para o conteúdo
                 verticalArrangement = Arrangement.spacedBy(16.dp),
             ) {
-                TelaConteudo() // Conteúdo da tela
+                TelaConteudo(
+                    usuarioId = usuario.indice, // Passa o ID do usuário
+                    cartViewModel = viewModel() // Passa o CartViewModel
+                )// Conteúdo da tela
             }
         }
     }

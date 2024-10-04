@@ -70,7 +70,7 @@ class UsuarioDAO {
     fun updateUserProfileImage(usuarioId: String, imageUrl: String) {
         val usuarioRef = db.collection("usuario").document(usuarioId)
 
-        usuarioRef.update("fotoPerfilUrl", imageUrl)
+        usuarioRef.update("foto", imageUrl)
             .addOnSuccessListener {
                 Log.d("Firestore", "Imagem de perfil atualizada com sucesso!")
             }

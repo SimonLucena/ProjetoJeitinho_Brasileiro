@@ -74,7 +74,7 @@ fun TelaLogin(innerPadding: PaddingValues, onSigninClick: (Usuario) -> Unit, onS
                     scope.launch(Dispatchers.IO) {
                         usuarioDAO.buscarPorLogin(login, callBack = { usuario ->
                             if(usuario != null && usuario.senha == senha){
-                                val usuarioLogin = Usuario(0, usuario.nome, usuario.email, usuario.senha)
+                                val usuarioLogin = Usuario(usuario.indice, usuario.nome, usuario.email, usuario.senha)
 //                                cadastro.addPerfil(usuarioLogin)
                                 onSigninClick(usuarioLogin)
                             }else{

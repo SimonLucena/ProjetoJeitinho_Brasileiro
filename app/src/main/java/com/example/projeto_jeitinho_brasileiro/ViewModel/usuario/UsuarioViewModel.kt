@@ -1,15 +1,19 @@
 package com.example.projeto_jeitinho_brasileiro.ViewModel.usuario
 
 import android.net.Uri
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.example.projeto_jeitinho_brasileiro.repositorio.user.Usuario
+import com.example.projeto_jeitinho_brasileiro.repositorio.user.UsuarioDAO
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import java.util.UUID
 
 class UsuarioViewModel: ViewModel() {
     private val _usuario = MutableStateFlow<Usuario?>(null)
     val usuario = _usuario.asStateFlow()
+    private val usuarioDAO = UsuarioDAO()
 
     fun login(usuario: Usuario) {
         _usuario.value = usuario

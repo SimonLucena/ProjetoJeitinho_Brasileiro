@@ -52,7 +52,7 @@ fun TelaCart(
     viewModel: CartViewModel,
     receitaDAO: ReceitaDAO,
     onCheckoutClick: () -> Unit,
-    onBackClick: () -> Unit // Agora você tem a opção de voltar
+    onBackClick: () -> Unit // jesuscristo
 ) {
     // Coletar o carrinho local do usuário
     val carrinhoUsuario by viewModel.carrinhoUsuario.collectAsState()

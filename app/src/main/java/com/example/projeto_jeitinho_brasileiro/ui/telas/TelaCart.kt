@@ -63,13 +63,14 @@ fun TelaCart(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color.White)
+                .background(Color(0xFFFFF176)) // Fundo amarelo claro
                 .padding(16.dp)
         ) {
             Text(
                 text = "Carrinho de Compras",
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold,
+                color = Color(0xFF4CAF50), // Título em verde
                 modifier = Modifier.padding(bottom = 16.dp)
             )
 
@@ -108,16 +109,20 @@ fun TelaCart(
                     text = "Total: R$ ${"%.2f".format(viewModel.calcularTotal())}",
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
+                    color = Color(0xFF5D4037), // Marrom para combinar com a paleta
                     modifier = Modifier.padding(bottom = 16.dp)
                 )
 
-                Button(onClick = {
-                    // Simula o checkout
-                    viewModel.registrarCompra(usuarioId)
-                    viewModel.limparCarrinho(usuarioId)
-                    onCheckoutClick()
-                }) {
-                    Text(text = "Finalizar Compra")
+                Button(
+                    onClick = {
+                        // Simula o checkout
+                        viewModel.registrarCompra(usuarioId)
+                        viewModel.limparCarrinho(usuarioId)
+                        onCheckoutClick()
+                    },
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4CAF50)) // Verde para o botão
+                ) {
+                    Text(text = "Finalizar Compra", color = Color.White)
                 }
             }
         }
@@ -132,7 +137,7 @@ fun CartItemCard(
     onRemoveItem: () -> Unit
 ) {
     // Associa a imagem ao nome do produto
-    val imageResId = when (cartItem.receita_id) {  // Substituir name por receita_id
+    val imageResId = when (cartItem.receita_id) {
         "Produto A" -> R.drawable.pacoca
         "Produto B" -> R.drawable.feijao_tropeiro
         "Produto C" -> R.drawable.camarao_moranga
@@ -142,7 +147,7 @@ fun CartItemCard(
     // Card de cada item no carrinho
     ElevatedCard(
         elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
-        colors = CardDefaults.cardColors(containerColor = Color(0xfffdfdfd)),
+        colors = CardDefaults.cardColors(containerColor = Color(0xFFFFECB3)), // Cor creme para o fundo do card
         modifier = Modifier
             .fillMaxWidth()
             .padding(PaddingValues(bottom = 8.dp))
@@ -151,7 +156,7 @@ fun CartItemCard(
             // Imagem do item
             Image(
                 painter = painterResource(id = imageResId),
-                contentDescription = cartItem.receita_id,  // Substituir name por receita_id
+                contentDescription = cartItem.receita_id,
                 modifier = Modifier
                     .size(80.dp)
                     .clip(CircleShape),
@@ -166,9 +171,10 @@ fun CartItemCard(
                 verticalArrangement = Arrangement.Center
             ) {
                 Text(
-                    text = cartItem.receita_id,  // Substituir name por receita_id
+                    text = cartItem.receita_id,
                     style = MaterialTheme.typography.bodyLarge,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
+                    color = Color(0xFF5D4037) // Marrom para o texto
                 )
                 Text(
                     text = "R$ ${"%.2f".format(cartItem.price)}",
@@ -184,7 +190,7 @@ fun CartItemCard(
                 IconButton(onClick = onIncreaseQuantity) {
                     Icon(imageVector = Icons.Default.Add, contentDescription = "Aumentar quantidade")
                 }
-                Text(text = cartItem.quantidade.toString(), style = MaterialTheme.typography.bodyMedium)  // Corrigir para quantidade
+                Text(text = cartItem.quantidade.toString(), style = MaterialTheme.typography.bodyMedium)
                 IconButton(onClick = onDecreaseQuantity) {
                     Icon(imageVector = Icons.Default.Close, contentDescription = "Diminuir quantidade")
                 }
@@ -193,12 +199,13 @@ fun CartItemCard(
             Spacer(modifier = Modifier.width(8.dp))
 
             // Botão para remover o item
-            Button(onClick = onRemoveItem) {
-                Text("Remover")
+            Button(onClick = onRemoveItem, colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4CAF50))) {
+                Text("Remover", color = Color.White)
             }
         }
     }
 }
+
 
 // Função para calcular o preço total do carrinho
 fun calculateTotalPrice(items: List<CartItem>): Double {

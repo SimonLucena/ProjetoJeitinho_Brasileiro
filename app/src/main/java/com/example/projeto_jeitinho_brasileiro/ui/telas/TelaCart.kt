@@ -111,7 +111,12 @@ fun TelaCart(
                     modifier = Modifier.padding(bottom = 16.dp)
                 )
 
-                Button(onClick = onCheckoutClick) {
+                Button(onClick = {
+                    // Simula o checkout
+                    viewModel.registrarCompra(usuarioId)
+                    viewModel.limparCarrinho(usuarioId)
+                    onCheckoutClick()
+                }) {
                     Text(text = "Finalizar Compra")
                 }
             }

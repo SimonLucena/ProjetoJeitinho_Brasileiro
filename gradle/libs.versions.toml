@@ -16,9 +16,11 @@ navigationCompose = "2.7.7"
 firebaseFirestoreKtx = "25.0.0"
 firebaseStorageKtx = "21.0.1"
 constraintlayout = "2.1.4"
+uiTextGoogleFonts = "1.7.3"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-ui-text-google-fonts = { module = "androidx.compose.ui:ui-text-google-fonts", version.ref = "uiTextGoogleFonts" }
 compiler = { module = "com.github.bumptech.glide:compiler", version.ref = "compiler" }
 firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }

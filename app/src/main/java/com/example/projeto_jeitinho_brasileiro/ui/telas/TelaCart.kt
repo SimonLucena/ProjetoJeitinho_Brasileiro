@@ -1,4 +1,4 @@
-package com.example.projeto_jeitinho_brasileiro.ui.telas
+package com.example.projeto_jeitinho_brasileiro.ui.telas;
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

@@ -30,6 +30,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.projeto_jeitinho_brasileiro.ViewModel.Carrinho.CartViewModel
 import com.example.projeto_jeitinho_brasileiro.ViewModel.usuario.UsuarioViewModel
+import com.example.projeto_jeitinho_brasileiro.repositorio.receita.ReceitaDAO
 import com.example.projeto_jeitinho_brasileiro.repositorio.user.UsuarioDAO
 import com.example.projeto_jeitinho_brasileiro.ui.telas.TelaAbout
 import com.example.projeto_jeitinho_brasileiro.ui.telas.TelaLogin
@@ -141,16 +142,18 @@ class MainActivity : ComponentActivity() {
                         composable("carrinho") {
                             usuarioState?.let { it1 ->
                                 val cartViewModel: CartViewModel = viewModel()
+                                val receitaDAO = ReceitaDAO()
 
                                 val usuarioId = it1.indice
 
                                 TelaCart(
                                     usuarioId = usuarioId,
                                     viewModel = cartViewModel,
+                                    receitaDAO = receitaDAO,
                                     onCheckoutClick = {
-
                                     }
                                 )
+
                             }
                         }
                     }

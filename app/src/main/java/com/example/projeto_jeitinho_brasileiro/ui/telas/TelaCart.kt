@@ -14,6 +14,9 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 
 import androidx.compose.runtime.LaunchedEffect // Importar LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -24,6 +27,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.projeto_jeitinho_brasileiro.R
 import com.example.projeto_jeitinho_brasileiro.ViewModel.Carrinho.CartViewModel
+import com.example.projeto_jeitinho_brasileiro.repositorio.receita.ReceitaDAO
 
 // Dados de um item do carrinho
 data class CartItem(
@@ -46,15 +50,27 @@ data class CartItem(
 fun TelaCart(
     usuarioId: String,
     viewModel: CartViewModel,
+    receitaDAO: ReceitaDAO,
     onCheckoutClick: () -> Unit
 ) {
     // Coletar o carrinho local do usuário
     val carrinhoUsuario by viewModel.carrinhoUsuario.collectAsState()
 
+    // Estado para armazenar os nomes das receitas
+    var receitasMap by remember { mutableStateOf<Map<String, String>>(emptyMap()) }
+
     // Buscar os itens do carrinho
     LaunchedEffect(usuarioId) {
         viewModel.fetchCartItems(usuarioId)
+
+        // Carregar as receitas e mapear pelo ID
+        receitaDAO.listarReceitas { receitas ->
+            receitas?.let {
+                receitasMap = it.associateBy({ it.indice.toString() }, { it.nome })
+            }
+        }
     }
+
 
     // Se o carrinho estiver nulo, mostrar um texto de carregamento
     if (carrinhoUsuario == null) {
@@ -81,8 +97,11 @@ fun TelaCart(
             ) {
                 items(carrinhoUsuario!!.itens.size) { index ->
                     val item = carrinhoUsuario!!.itens[index]
+                    // Buscar o nome da receita pelo ID
+                    val nomeReceita = receitasMap[item.receita_id] ?: "Receita Desconhecida"
+
                     CartItemCard(
-                        cartItem = item,
+                        cartItem = item.copy(receita_id = nomeReceita), // Usar o nome buscado
                         onIncreaseQuantity = {
                             viewModel.addItemToCart(usuarioId, item.copy(quantidade = item.quantidade + 1))
                         },
@@ -97,6 +116,7 @@ fun TelaCart(
                     )
                 }
             }
+
 
             Spacer(modifier = Modifier.padding(16.dp))
 
@@ -138,9 +158,9 @@ fun CartItemCard(
 ) {
     // Associa a imagem ao nome do produto
     val imageResId = when (cartItem.receita_id) {
-        "Produto A" -> R.drawable.pacoca
-        "Produto B" -> R.drawable.feijao_tropeiro
-        "Produto C" -> R.drawable.camarao_moranga
+        "Paçoca" -> R.drawable.pacoca
+        "Feijão Tropeiro" -> R.drawable.feijao_tropeiro
+        "Camarão na Moranga" -> R.drawable.camarao_moranga
         else -> R.drawable.silhueta_perfil
     }
 

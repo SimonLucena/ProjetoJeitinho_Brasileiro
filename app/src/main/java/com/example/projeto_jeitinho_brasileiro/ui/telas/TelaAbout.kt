@@ -1,5 +1,7 @@
 package com.example.projeto_jeitinho_brasileiro.ui.telas
 
+import android.util.TypedValue
+import android.widget.ImageView
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -40,6 +42,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.TextButton
+import androidx.compose.ui.viewinterop.AndroidView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 
 
 @Composable
@@ -89,16 +94,34 @@ fun TelaAbout(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // Imagem de perfil interativa
-            Image(
-                painter = painterResource(id = R.drawable.silhueta_perfil),
-                contentDescription = "Imagem de perfil",
+            
+            // Imagem de perfil interativa com Glide
+            AndroidView(
+                factory = { ctx ->
+                    ImageView(ctx).apply {
+                        val sizeInPx = TypedValue.applyDimension(
+                            TypedValue.COMPLEX_UNIT_DIP,
+                            128f,
+                            ctx.resources.displayMetrics
+                        ).toInt()
+
+                        layoutParams = androidx.constraintlayout.widget.ConstraintLayout.LayoutParams(
+                            sizeInPx,
+                            sizeInPx
+                        )
+                        clipToOutline = true // Para cortar na borda circular
+                        Glide.with(ctx)
+                            .load(usuario.foto)
+                            .apply(RequestOptions().circleCrop()) // Aplica o corte circular
+                            .placeholder(R.drawable.silhueta_perfil) // Imagem de placeholder
+                            .into(this)
+                    }
+                },
                 modifier = Modifier
                     .size(128.dp)
                     .clip(CircleShape)
                     .border(2.dp, MaterialTheme.colorScheme.primary, CircleShape)
-                    .clickable { onImageClick() }, // Torna a imagem clicável
-                contentScale = ContentScale.Crop
+                    .clickable { onImageClick() } // Torna a imagem clicável
             )
 
             Spacer(modifier = Modifier.size(16.dp)) // Espaço entre imagem e nome

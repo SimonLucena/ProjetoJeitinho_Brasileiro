@@ -38,7 +38,8 @@ class UsuarioDAO {
                         indice = document.id, // Pega o ID do documento
                         nome = document.getString("nome") ?: "",
                         email = document.getString("login") ?: "",
-                        senha = document.getString("senha") ?: ""
+                        senha = document.getString("senha") ?: "",
+                        foto = document.getString("foto") ?: "",
                     )
                     callBack(usuario)
                 } else {
@@ -59,7 +60,8 @@ class UsuarioDAO {
             hashMapOf(
                 "login" to email,
                 "nome" to nome,
-                "senha" to senha
+                "senha" to senha,
+                "foto" to ""
             )
         )
     }

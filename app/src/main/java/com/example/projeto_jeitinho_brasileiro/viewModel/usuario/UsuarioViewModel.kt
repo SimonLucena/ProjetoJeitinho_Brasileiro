@@ -23,22 +23,23 @@ class UsuarioViewModel: ViewModel() {
     }
 
     // Função para fazer upload da imagem para o Firebase Storage
-    fun uploadImageToFirebaseStorage(imageUri: Uri) {
+    fun uploadImageToFirebaseStorage(imageUri: Uri, usuarioId: String) {
         val storage = FirebaseStorage.getInstance()
         val storageRef = storage.reference.child("profile_images/${UUID.randomUUID()}.jpg")
 
+        // Upload do arquivo para o Firebase Storage
         storageRef.putFile(imageUri)
             .addOnSuccessListener {
-                // Após o upload bem-sucedido, obtenha a URL da imagem
+                // Após o upload, obter a URL de download da imagem
                 storageRef.downloadUrl.addOnSuccessListener { uri ->
                     val imageUrl = uri.toString()
-                    // Atualize o Firestore com a URL da imagem usando o DAO
-                    usuarioDAO.updateUserProfileImage("usuario_id", imageUrl)
+
+                    // Atualizar o Firestore com a URL da imagem
+                    usuarioDAO.updateUserProfileImage(usuarioId, imageUrl)
                 }
             }
-            .addOnFailureListener {
-                // Tratamento de falhas no upload
-                Log.e("FirebaseStorage", "Erro ao fazer upload da imagem", it)
+            .addOnFailureListener { e ->
+                Log.e("FirebaseStorage", "Erro ao fazer upload da imagem", e)
             }
     }
 }

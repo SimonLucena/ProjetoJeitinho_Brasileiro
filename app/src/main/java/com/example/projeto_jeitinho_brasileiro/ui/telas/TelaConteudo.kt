@@ -3,35 +3,29 @@ package com.example.projeto_jeitinho_brasileiro.ui.telas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.googlefonts.GoogleFont
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.projeto_jeitinho_brasileiro.R
 import com.example.projeto_jeitinho_brasileiro.repositorio.receita.Receita
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.projeto_jeitinho_brasileiro.ViewModel.receita.ReceitaViewModel
+
+// Carregando a fonte Oswald do Google Fonts
 
 @Composable
 fun TelaConteudo() {
@@ -44,11 +38,12 @@ fun TelaConteudo() {
         }
     }
 
+    // Layout principal da tela
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
+            .background(Color(0xFFFFF176)) // Fundo amarelo claro
             .padding(8.dp)
-            .background(Color.White)
     ) {
         receitas?.let { list ->
             items(list) { receita ->
@@ -65,43 +60,49 @@ fun TelaConteudo() {
                     else -> R.drawable.kelly_pool
                 }
 
+                // Card para cada item da lista
                 ElevatedCard(
-                    elevation = CardDefaults.cardElevation(
-                        defaultElevation = 6.dp
-                    ),
-                    colors = CardDefaults.cardColors(
-                        containerColor = Color(0xfffdfdfd),
-                    ),
+                    elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
+                    colors = CardDefaults.cardColors(containerColor = Color(0xfffdfdfd)), // Cartão branco
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(PaddingValues(bottom = 8.dp))
-                        .clickable { /*  */ }
+                        .clickable { /* Ação ao clicar no item */ }
                 ) {
-                    Row {
+                    Row(
+                        modifier = Modifier
+                            .padding(16.dp)
+                            .fillMaxWidth()
+                    ) {
+                        // Imagem da receita
                         Image(
                             painter = painterResource(id = resourceId),
-                            contentDescription = "Imagem",
+                            contentDescription = "Imagem da Receita",
                             modifier = Modifier
-                                .fillMaxWidth(0.5f)
-                                .aspectRatio(1f)
-                                .padding(16.dp)
+                                .size(100.dp)
+                                .padding(end = 16.dp)
                         )
+
+                        // Título e descrição da receita
                         Column(
                             modifier = Modifier
-                                .padding(16.dp)
                                 .align(Alignment.CenterVertically)
+                                .padding(end = 8.dp)
                         ) {
                             Text(
                                 text = titulo ?: "Título indisponível",
                                 style = TextStyle(
                                     fontSize = 20.sp,
-                                    color = Color.Black
+                                    fontWeight = FontWeight.Bold,
+                                    fontFamily = fontFamily, // Fonte Oswald
+                                    color = Color(0xFF5D4037) // Marrom para combinar com a paleta
                                 )
                             )
                             Text(
                                 text = descricao ?: "Descrição indisponível",
                                 style = TextStyle(
                                     fontSize = 14.sp,
+                                    fontFamily = fontFamily, // Fonte Oswald
                                     color = Color.Gray
                                 ),
                                 modifier = Modifier.padding(top = 8.dp)
@@ -111,14 +112,5 @@ fun TelaConteudo() {
                 }
             }
         }
-//        for (item in receitas.getListaRepositorio()) {
-//        }
     }
 }
-
-
-//    receita.addReceita(Repositorio(0, "pacoca", "Paçoca Nordestina", "Que tal preparar uma paçoca de carne de sol, delicioso e inusitado acompanhamento? \n Trata-se de uma farofa salgada, prato perfeito para a sua refeição de domingo."))
-//    receita.addReceita(Repositorio(1, "feijao_tropeiro", "Feijão Tropeiro", "O Feijão tropeiro mineiro, é um prato que leva feijão-carioca, bacon, calabresa, couve, ovos e farinha de mandioca."))
-//    receita.addReceita(Repositorio(2, "camarao_moranga", "Camarão na moranga", "Perfeito para ocasiões especiais e para impressionar os convidados, o camarão na moranga é um prato que combina simplicidade com sofisticação, \n trazendo à mesa um pedacinho da riqueza da culinária brasileira."))
-//    receita.addReceita(Repositorio(3, "mousse_maracuja", "Mousse de Maracujá", "A combinação equilibrada entre a acidez característica do maracujá e a suavidade dos laticínios torna esta sobremesa um verdadeiro deleite para o paladar."))
-//    receita.addReceita(Repositorio(4, "biscoito_para", "Biscoito de Castanha-do-Pará", "Imagine o sabor autêntico da Amazônia em cada mordida. \n Os Biscoitos de Castanha do Pará são uma verdadeira joia da culinária brasileira em um lanche simples."))

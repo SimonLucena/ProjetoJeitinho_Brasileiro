@@ -151,12 +151,16 @@ class MainActivity : ComponentActivity() {
                                     viewModel = cartViewModel,
                                     receitaDAO = receitaDAO,
                                     onCheckoutClick = {
+                                        // Implementar o comportamento do checkout aqui
+                                    },
+                                    onBackClick = {
+                                        navController.popBackStack() // Voltar para a tela anterior (TelaPrincipal)
                                     }
                                 )
+                            }
 
                             }
                         }
-                    }
                 }
             }
         }

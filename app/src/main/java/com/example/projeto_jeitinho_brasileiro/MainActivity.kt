@@ -148,7 +148,11 @@ class MainActivity : ComponentActivity() {
                                     usuarioId = usuarioId,
                                     viewModel = cartViewModel,
                                     onCheckoutClick = {
-
+                                        // Lógica de finalização de compra
+                                    },
+                                    onBackClick = {
+                                        // Volta para a tela principal
+                                        navController.popBackStack() // Voltar para a tela anterior
                                     }
                                 )
                             }

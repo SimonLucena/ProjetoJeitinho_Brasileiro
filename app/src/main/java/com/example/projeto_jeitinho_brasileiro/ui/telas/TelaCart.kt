@@ -7,6 +7,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -42,11 +43,13 @@ data class CartItem(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TelaCart(
     usuarioId: String,
     viewModel: CartViewModel,
-    onCheckoutClick: () -> Unit
+    onCheckoutClick: () -> Unit,
+    onBackClick: () -> Unit // Callback para voltar para a tela principal
 ) {
     // Coletar o carrinho local do usuário
     val carrinhoUsuario by viewModel.carrinhoUsuario.collectAsState()
@@ -56,77 +59,95 @@ fun TelaCart(
         viewModel.fetchCartItems(usuarioId)
     }
 
-    // Se o carrinho estiver nulo, mostrar um texto de carregamento
-    if (carrinhoUsuario == null) {
-        Text("Carregando carrinho...")
-    } else {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Color(0xFFFFF176)) // Fundo amarelo claro
-                .padding(16.dp)
-        ) {
-            Text(
-                text = "Carrinho de Compras",
-                style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.Bold,
-                color = Color(0xFF4CAF50), // Título em verde
-                modifier = Modifier.padding(bottom = 16.dp)
-            )
-
-            // Lista de produtos no carrinho
-            LazyColumn(
-                verticalArrangement = Arrangement.spacedBy(16.dp),
-                modifier = Modifier.weight(1f)
-            ) {
-                items(carrinhoUsuario!!.itens.size) { index ->
-                    val item = carrinhoUsuario!!.itens[index]
-                    CartItemCard(
-                        cartItem = item,
-                        onIncreaseQuantity = {
-                            viewModel.addItemToCart(usuarioId, item.copy(quantidade = item.quantidade + 1))
-                        },
-                        onDecreaseQuantity = {
-                            if (item.quantidade > 1) {
-                                viewModel.addItemToCart(usuarioId, item.copy(quantidade = item.quantidade - 1))
-                            }
-                        },
-                        onRemoveItem = {
-                            viewModel.removeItemFromCart(usuarioId, item.id)
-                        }
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(
+                        text = "Carrinho de Compras",
+                        color = Color.White,
+                        style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold)
                     )
-                }
-            }
-
-            Spacer(modifier = Modifier.padding(16.dp))
-
-            // Exibir o total e o botão de finalizar compra
-            Column(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalAlignment = Alignment.End
-            ) {
-                Text(
-                    text = "Total: R$ ${"%.2f".format(viewModel.calcularTotal())}",
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold,
-                    color = Color(0xFF5D4037), // Marrom para combinar com a paleta
-                    modifier = Modifier.padding(bottom = 16.dp)
-                )
-
-                Button(
-                    onClick = {
-                        // Simula o checkout
-                        viewModel.registrarCompra(usuarioId)
-                        viewModel.limparCarrinho(usuarioId)
-                        onCheckoutClick()
-                    },
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4CAF50)) // Verde para o botão
+                },
+                navigationIcon = {
+                    IconButton(onClick = onBackClick) {
+                        Icon(
+                            imageVector = Icons.Default.ArrowBack,
+                            contentDescription = "Voltar",
+                            tint = Color.White
+                        )
+                    }
+                },
+                colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = Color(0xFF4CAF50)) // Verde para a TopAppBar
+            )
+        },
+        content = { innerPadding ->
+            if (carrinhoUsuario == null) {
+                Text("Carregando carrinho...")
+            } else {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(Color(0xFFFFF176)) // Fundo amarelo claro
+                        .padding(innerPadding)
                 ) {
-                    Text(text = "Finalizar Compra", color = Color.White)
+                    // Lista de produtos no carrinho
+                    LazyColumn(
+                        verticalArrangement = Arrangement.spacedBy(16.dp),
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(16.dp)
+                    ) {
+                        items(carrinhoUsuario!!.itens.size) { index ->
+                            val item = carrinhoUsuario!!.itens[index]
+                            CartItemCard(
+                                cartItem = item,
+                                onIncreaseQuantity = {
+                                    viewModel.addItemToCart(usuarioId, item.copy(quantidade = item.quantidade + 1))
+                                },
+                                onDecreaseQuantity = {
+                                    if (item.quantidade > 1) {
+                                        viewModel.addItemToCart(usuarioId, item.copy(quantidade = item.quantidade - 1))
+                                    }
+                                },
+                                onRemoveItem = {
+                                    viewModel.removeItemFromCart(usuarioId, item.id)
+                                }
+                            )
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.padding(16.dp))
+
+                    // Exibir o total e o botão de finalizar compra
+                    Column(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalAlignment = Alignment.End
+                    ) {
+                        Text(
+                            text = "Total: R$ ${"%.2f".format(viewModel.calcularTotal())}",
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.Bold,
+                            color = Color(0xFF5D4037), // Marrom para combinar com a paleta
+                            modifier = Modifier.padding(bottom = 16.dp)
+                        )
+
+                        Button(
+                            onClick = {
+                                // Simula o checkout
+                                viewModel.registrarCompra(usuarioId)
+                                viewModel.limparCarrinho(usuarioId)
+                                onCheckoutClick()
+                            },
+                            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4CAF50)) // Verde para o botão
+                        ) {
+                            Text(text = "Finalizar Compra", color = Color.White)
+                        }
+                    }
                 }
             }
         }
-    }
+    )
 }
 
 @Composable

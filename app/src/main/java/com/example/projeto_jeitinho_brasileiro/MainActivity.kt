@@ -46,6 +46,8 @@ class MainActivity : ComponentActivity() {
 
         enableEdgeToEdge()
 
+        val usuarioViewModel: UsuarioViewModel = ViewModelProvider(this).get(UsuarioViewModel::class.java)
+
         // Configuração do ActivityResultLauncher para a seleção de imagem
         imagePickerLauncher = registerForActivityResult(
             ActivityResultContracts.StartActivityForResult()
@@ -53,11 +55,11 @@ class MainActivity : ComponentActivity() {
             if (result.resultCode == Activity.RESULT_OK) {
                 val imageUri = result.data?.data
                 imageUri?.let {
-                    uploadImageToFirebase(it)
+                    val usuarioId = usuarioViewModel.usuario.value?.indice ?: return@let
+                    uploadImageToFirebase(it, usuarioId)
                 }
             }
         }
-
 
         setContent {
             ProjetoJeitinho_BrasileiroTheme {
@@ -163,16 +165,16 @@ class MainActivity : ComponentActivity() {
             intent.putExtra(MediaStore.EXTRA_PICK_IMAGES_MAX, 1)
             imagePickerLauncher.launch(intent)
         } else {
-            // Implementação para Android abaixo de 14
             val intent = Intent(Intent.ACTION_PICK)
             intent.type = "image/*"
             imagePickerLauncher.launch(intent)
         }
     }
 
+
     // Função para lidar com o upload da imagem no Firebase
-    private fun uploadImageToFirebase(imageUri: Uri) {
+    private fun uploadImageToFirebase(imageUri: Uri, usuarioId: String) {
         val viewmodel: UsuarioViewModel = ViewModelProvider(this).get(UsuarioViewModel::class.java)
-        viewmodel.uploadImageToFirebaseStorage(imageUri)
+        viewmodel.uploadImageToFirebaseStorage(imageUri, usuarioId)
     }
 }

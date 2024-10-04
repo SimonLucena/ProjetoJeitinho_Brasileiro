@@ -48,6 +48,21 @@ class CartViewModel : ViewModel() {
         }
     }
 
+    // Função para registrar uma compra no Firestore
+    fun registrarCompra(usuarioId: String) {
+        viewModelScope.launch {
+            carrinhoDAO.registrarCompra(usuarioId, _carrinhoUsuario.value?.itens ?: emptyList())
+        }
+    }
+
+    // Função para limpar o carrinho após o checkout
+    fun limparCarrinho(usuarioId: String) {
+        viewModelScope.launch {
+            carrinhoDAO.limparCarrinho(usuarioId)
+            fetchCartItems(usuarioId) // Atualiza o carrinho (que agora estará vazio)
+        }
+    }
+
     // Função para calcular o total usando a classe local
     fun calcularTotal(): Double {
         return _carrinhoUsuario.value?.calcularTotal() ?: 0.0

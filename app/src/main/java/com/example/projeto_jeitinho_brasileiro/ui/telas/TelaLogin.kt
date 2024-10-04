@@ -1,4 +1,4 @@
-package com.example.projeto_jeitinho_brasileiro.ui.telas
+package com.example.projeto_jeitinho_brasileiro.ui.telas;
 
 import android.widget.Toast
 import androidx.compose.foundation.Image
@@ -13,8 +13,12 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.googlefonts.GoogleFont
+import androidx.compose.ui.text.googlefonts.Font
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.projeto_jeitinho_brasileiro.R
@@ -22,6 +26,15 @@ import com.example.projeto_jeitinho_brasileiro.repositorio.user.Usuario
 import com.example.projeto_jeitinho_brasileiro.repositorio.user.UsuarioDAO
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+
+// Carregando a fonte Oswald do Google Fonts
+val provider = GoogleFont.Provider(
+    providerAuthority = "com.google.android.gms.fonts",
+    providerPackage = "com.google.android.gms",
+    certificates = R.array.com_google_android_gms_fonts_certs
+)
+val fontName = GoogleFont("Oswald")
+val fontFamily = FontFamily(Font(googleFont = fontName, fontProvider = provider))
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -39,10 +52,7 @@ fun TelaLogin(innerPadding: PaddingValues, onSigninClick: (Usuario) -> Unit, onS
         topBar = {
             TopAppBar(
                 title = {
-                    Text(
-                        text = "Bem-vindo ao Jeitinho Brasileiro",
-                        color = Color.White
-                    )
+
                 },
                 colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = Color(0xFF4CAF50)) // Cor verde
             )
@@ -76,28 +86,31 @@ fun TelaLogin(innerPadding: PaddingValues, onSigninClick: (Usuario) -> Unit, onS
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             // Banner no topo
-            Box(modifier = Modifier.fillMaxWidth()) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(120.dp) // Ajustando a altura do banner
+            ) {
                 Image(
                     painter = painterResource(id = R.drawable.banner), // Substitua pelo seu banner
                     contentDescription = "Banner",
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(200.dp) // Altura ajustada para o banner
-                        .align(Alignment.TopCenter), // Alinha no topo
+                    modifier = Modifier.fillMaxSize(),
                     contentScale = ContentScale.Crop
                 )
 
-                // Texto sobreposto ao banner
+                // Texto sobreposto ao banner, centralizado e justificado
                 Text(
                     text = "CADA PRATO CONTA UMA HISTÓRIA, REVELANDO TRADIÇÕES, INGREDIENTES LOCAIS E TÉCNICAS CULINÁRIAS ÚNICAS.",
                     style = TextStyle(
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Bold,
+                        fontFamily = fontFamily, // Usar a fonte Oswald do Google Fonts
                         color = Color.White // Texto branco sobre o banner
                     ),
                     modifier = Modifier
-                        .align(Alignment.Center) // Alinha o texto no centro do banner
-                        .padding(16.dp)
+                        .align(Alignment.Center) // Centraliza o texto no meio do banner
+                        .padding(horizontal = 16.dp), // Padding para dar espaço lateral ao texto
+                    textAlign = TextAlign.Justify // Justificar o texto
                 )
             }
 

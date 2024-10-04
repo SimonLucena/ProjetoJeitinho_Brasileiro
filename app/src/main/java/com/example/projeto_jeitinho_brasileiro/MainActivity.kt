@@ -1,5 +1,6 @@
 package com.example.projeto_jeitinho_brasileiro
 
+import com.example.projeto_jeitinho_brasileiro.ui.telas.TelaCart;
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -19,10 +20,10 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.projeto_jeitinho_brasileiro.ViewModel.Carrinho.CartViewModel
 import com.example.projeto_jeitinho_brasileiro.ViewModel.usuario.UsuarioViewModel
 import com.example.projeto_jeitinho_brasileiro.repositorio.user.UsuarioDAO
 import com.example.projeto_jeitinho_brasileiro.ui.telas.TelaAbout
-import com.example.projeto_jeitinho_brasileiro.ui.telas.TelaCart
 import com.example.projeto_jeitinho_brasileiro.ui.telas.TelaLogin
 import com.example.projeto_jeitinho_brasileiro.ui.telas.TelaPrincipal
 import com.example.projeto_jeitinho_brasileiro.ui.telas.TelaSignup
@@ -109,9 +110,15 @@ class MainActivity : ComponentActivity() {
                         }
                         // Rota para o carrinho
                         composable("carrinho") {
+                            val cartViewModel: CartViewModel = viewModel()
+
+                            val usuarioId = "user_id_aqui"
+
                             TelaCart(
+                                usuarioId = usuarioId,
+                                viewModel = cartViewModel,
                                 onCheckoutClick = {
-                                    navController.navigate("principal") // Ação após finalizar compra
+
                                 }
                             )
                         }

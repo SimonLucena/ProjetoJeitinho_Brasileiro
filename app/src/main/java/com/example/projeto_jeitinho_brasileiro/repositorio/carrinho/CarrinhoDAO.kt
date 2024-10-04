@@ -94,4 +94,12 @@ class CarrinhoDAO {
             Log.w("CarrinhoDAO", "Erro ao limpar o carrinho", e)
         }
     }
+
+    fun atualizarQuantidadeItem(usuarioId: String, itemId: String, newQuantity: Int) {
+        val usuarioRef = db.collection("usuario").document(usuarioId)
+        val carrinhoRef = usuarioRef.collection("carrinho")
+
+        carrinhoRef.document(itemId).update("quantidade", newQuantity)
+    }
+
 }

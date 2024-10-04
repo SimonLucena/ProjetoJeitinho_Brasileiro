@@ -27,6 +27,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.projeto_jeitinho_brasileiro.R
 import com.example.projeto_jeitinho_brasileiro.ViewModel.Carrinho.CartViewModel
+import com.example.projeto_jeitinho_brasileiro.repositorio.receita.Receita
 import com.example.projeto_jeitinho_brasileiro.repositorio.receita.ReceitaDAO
 
 // Dados de um item do carrinho
@@ -57,7 +58,7 @@ fun TelaCart(
     val carrinhoUsuario by viewModel.carrinhoUsuario.collectAsState()
 
     // Estado para armazenar os nomes das receitas
-    var receitasMap by remember { mutableStateOf<Map<String, String>>(emptyMap()) }
+    var receitasMap by remember { mutableStateOf<Map<String, Pair<String, Double>>>(emptyMap()) }
 
     // Buscar os itens do carrinho
     LaunchedEffect(usuarioId) {
@@ -66,7 +67,7 @@ fun TelaCart(
         // Carregar as receitas e mapear pelo ID
         receitaDAO.listarReceitas { receitas ->
             receitas?.let {
-                receitasMap = it.associateBy({ it.indice.toString() }, { it.nome })
+                receitasMap = it.associateBy({ it.id ?: "" }, { Pair(it.nome ?: "Nome desconhecido", it.preco ?: 0.0) })
             }
         }
     }
@@ -95,19 +96,22 @@ fun TelaCart(
                 verticalArrangement = Arrangement.spacedBy(16.dp),
                 modifier = Modifier.weight(1f)
             ) {
+                // Dentro da renderização da lista de itens do carrinho
                 items(carrinhoUsuario!!.itens.size) { index ->
                     val item = carrinhoUsuario!!.itens[index]
-                    // Buscar o nome da receita pelo ID
-                    val nomeReceita = receitasMap[item.receita_id] ?: "Receita Desconhecida"
+
+                    // Buscar o nome e o preço da receita pelo ID
+                    val (nomeReceita, precoReceita) = receitasMap[item.receita_id] ?: Pair("Receita Desconhecida", 0.0)
 
                     CartItemCard(
-                        cartItem = item.copy(receita_id = nomeReceita), // Usar o nome buscado
+                        cartItem = item,
+                        receitaPreco = precoReceita, // Passa o preço correto da receita
                         onIncreaseQuantity = {
-                            viewModel.addItemToCart(usuarioId, item.copy(quantidade = item.quantidade + 1))
+                            viewModel.updateItemQuantity(usuarioId, item.id, item.quantidade + 1)
                         },
                         onDecreaseQuantity = {
                             if (item.quantidade > 1) {
-                                viewModel.addItemToCart(usuarioId, item.copy(quantidade = item.quantidade - 1))
+                                viewModel.updateItemQuantity(usuarioId, item.id, item.quantidade - 1)
                             }
                         },
                         onRemoveItem = {
@@ -115,6 +119,7 @@ fun TelaCart(
                         }
                     )
                 }
+
             }
 
 
@@ -152,6 +157,7 @@ fun TelaCart(
 @Composable
 fun CartItemCard(
     cartItem: CartItem,
+    receitaPreco: Double, // Recebe o preço da receita diretamente
     onIncreaseQuantity: () -> Unit,
     onDecreaseQuantity: () -> Unit,
     onRemoveItem: () -> Unit
@@ -173,15 +179,6 @@ fun CartItemCard(
             .padding(PaddingValues(bottom = 8.dp))
     ) {
         Row(modifier = Modifier.padding(16.dp)) {
-            // Imagem do item
-            Image(
-                painter = painterResource(id = imageResId),
-                contentDescription = cartItem.receita_id,
-                modifier = Modifier
-                    .size(80.dp)
-                    .clip(CircleShape),
-                contentScale = ContentScale.Crop
-            )
 
             // Nome e preço do item
             Column(
@@ -191,13 +188,13 @@ fun CartItemCard(
                 verticalArrangement = Arrangement.Center
             ) {
                 Text(
-                    text = cartItem.receita_id,
+                    text = cartItem.receita_id, // Nome da receita
                     style = MaterialTheme.typography.bodyLarge,
                     fontWeight = FontWeight.Bold,
                     color = Color(0xFF5D4037) // Marrom para o texto
                 )
                 Text(
-                    text = "R$ ${"%.2f".format(cartItem.price)}",
+                    text = "R$ ${"%.2f".format(receitaPreco * cartItem.quantidade)}", // Usar o preço da receita multiplicado pela quantidade
                     style = MaterialTheme.typography.bodyMedium,
                     color = Color.Gray
                 )
@@ -210,7 +207,11 @@ fun CartItemCard(
                 IconButton(onClick = onIncreaseQuantity) {
                     Icon(imageVector = Icons.Default.Add, contentDescription = "Aumentar quantidade")
                 }
-                Text(text = cartItem.quantidade.toString(), style = MaterialTheme.typography.bodyMedium)
+                Text(
+                    text = cartItem.quantidade.toString(),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = Color(0xFF5D4037)
+                )
                 IconButton(onClick = onDecreaseQuantity) {
                     Icon(imageVector = Icons.Default.Close, contentDescription = "Diminuir quantidade")
                 }
@@ -227,7 +228,11 @@ fun CartItemCard(
 }
 
 
-// Função para calcular o preço total do carrinho
-fun calculateTotalPrice(items: List<CartItem>): Double {
-    return items.sumOf { it.price * it.quantidade }  // Corrigir para quantidade
+
+// Função para calcular o preço total do carrinho com base na receita e quantidade
+fun calculateTotalPrice(items: List<CartItem>, receitasMap: Map<String, Receita>): Double {
+    return items.sumOf { item ->
+        val receita = receitasMap[item.receita_id]
+        (receita?.preco ?: 0.0) * item.quantidade // Calcula o total com base no preço da receita
+    }
 }

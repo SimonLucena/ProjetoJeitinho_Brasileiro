@@ -67,4 +67,14 @@ class CartViewModel : ViewModel() {
     fun calcularTotal(): Double {
         return _carrinhoUsuario.value?.calcularTotal() ?: 0.0
     }
+
+    // Função para atualizar apenas a quantidade de um item
+    fun updateItemQuantity(usuarioId: String, itemId: String?, newQuantity: Int) {
+        itemId?.let {
+            viewModelScope.launch {
+                carrinhoDAO.atualizarQuantidadeItem(usuarioId, itemId, newQuantity)
+                fetchCartItems(usuarioId) // Atualiza o carrinho após a mudança
+            }
+        }
+    }
 }

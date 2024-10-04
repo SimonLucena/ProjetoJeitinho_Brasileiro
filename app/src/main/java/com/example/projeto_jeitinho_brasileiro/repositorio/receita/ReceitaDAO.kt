@@ -9,10 +9,14 @@ import com.google.firebase.firestore.toObjects
 class ReceitaDAO {
     val db = FirebaseFirestore.getInstance()
 
-    fun listarReceitas(callBack: (List<Receita>?) -> Unit){
+    fun listarReceitas(callBack: (List<Receita>?) -> Unit) {
         db.collection("receita").get()
-            .addOnSuccessListener { document ->
-                val receitas = document.toObjects<Receita>()
+            .addOnSuccessListener { documents ->
+                val receitas = documents.map { document ->
+                    val receita = document.toObject(Receita::class.java)
+                    receita.id = document.id // Atribuir o ID do documento à receita
+                    receita
+                }
                 callBack(receitas)
             }
             .addOnFailureListener {

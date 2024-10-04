@@ -1,4 +1,4 @@
-package com.example.projeto_jeitinho_brasileiro.ui.telas
+package com.example.projeto_jeitinho_brasileiro.ui.telas;
 
 import android.widget.Toast
 import androidx.compose.foundation.Image
